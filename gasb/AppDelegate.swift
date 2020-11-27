@@ -11,7 +11,7 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
-
+    var viewModel: ViewModel?
     var statusItem: NSStatusItem?
     var menu: NSMenu!
     
@@ -21,6 +21,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         
         dataManager = DataManager(managedObjectContext: persistentContainer.viewContext)
+        viewModel = ViewModel()
         // Status Bar
         let statusBar = NSStatusBar.system
         statusItem = statusBar.statusItem(withLength: NSStatusItem.variableLength)
@@ -54,38 +55,34 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         statusItem?.button?.attributedTitle = rows
         
         menu = NSMenu(title: "Status Bar Menu")
-            menu.delegate = self
-        
-        
-        let fetchRequest: NSFetchRequest = View.fetchRequest()
-        
-        do {
-            let items = try dataManager.managedObjectContext.fetch(fetchRequest)
-            
-            for item in items {
-                if let view_id = item.id, let service_email = item.service_email {
-                    let item = NSMenuItem()
-                    item.view = ViewStatsView(frame: NSRect(x: 0.0, y: 0.0, width: 213.0, height: 130))
-                    menu?.addItem(item)
-                    menu?.addItem(NSMenuItem.separator())
-                }
-            }
-        } catch {
-            print(error)
-        }
-        
+        menu.delegate = self
 
         
-        
-        
-        
-        menu?.addItem(NSMenuItem.separator())
-        menu?.addItem(withTitle: "Add View", action: #selector(openAddView), keyEquivalent: "")
-        menu?.addItem(withTitle: "Manage Views", action: #selector(openManageViewsView), keyEquivalent: "")
-        menu?.addItem(NSMenuItem.separator())
-        menu?.addItem(withTitle: "About gasb", action: #selector(openAbout), keyEquivalent: "")
-        menu?.addItem(withTitle: "Quit gasb", action: #selector(quitApp), keyEquivalent: "")
+
+  
     }
+    
+    func updateStatusItem() {
+
+    }
+    
+    func updateMenuItems() {
+
+        
+        let items = viewModel?.arrayController.arrangedObjects as! [View]
+        
+        for item in items {
+//            if let view_id = item.id, let service_email = item.service_email {
+                let item = NSMenuItem()
+                item.view = ViewStatsView(frame: NSRect(x: 0.0, y: 0.0, width: 213.0, height: 130))
+                menu?.addItem(item)
+                menu?.addItem(NSMenuItem.separator())
+//            }
+        }
+        configureServiceMenuItems()
+    }
+    
+    
 
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
@@ -96,8 +93,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     }
 
     @objc func statusBarButtonClicked(sender: NSStatusBarButton) {
+        
         if let menu = menu {
+            menu.removeAllItems()
             statusItem?.menu = menu // add menu to button...
+             updateMenuItems()
             statusItem?.button?.performClick(nil) // ...and click
         }
     }
@@ -105,6 +105,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     @objc func menuDidClose(_ menu: NSMenu) {
         statusItem?.menu = nil // remove menu so button works as before
     }
+    // MARK: - Configure Status Item
+    
+    // MARK: - Configure Menu Items
+    func configureServiceMenuItems() {
+        menu?.addItem(NSMenuItem.separator())
+        menu?.addItem(withTitle: "Manage Views", action: #selector(openManageViewsView), keyEquivalent: "")
+        menu?.addItem(NSMenuItem.separator())
+        menu?.addItem(withTitle: "About gasb", action: #selector(openAbout), keyEquivalent: "")
+        menu?.addItem(withTitle: "Quit gasb", action: #selector(quitApp), keyEquivalent: "")
+    }
+    
+    
+    
+    // MARK: - Handling clicking on menuItems
     
     @objc func openAddView() {
         let vc = ViewController()
@@ -168,7 +182,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         })
         return container
     }()
-
+    
+     func validateMenuItem(menuItem: NSMenuItem) -> Bool {
+        if(menuItem.action == Selector("batteryStatus:")) {
+            NSLog("refresh!");
+            let now = NSDate()
+            menuItem.title = String(format:"%f", now.timeIntervalSince1970);
+            return true;
+        }
+        return true;
+    }
+    
+    @IBAction func batteryStatus(sender: NSObject) {
+        print("lalalalal")
+    }
+    
     // MARK: - Core Data Saving and Undo support
 
     @IBAction func saveAction(_ sender: AnyObject?) {

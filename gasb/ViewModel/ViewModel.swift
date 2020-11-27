@@ -11,22 +11,61 @@ import Foundation
 import CoreData
 
 class ViewModel {
-    lazy var arrayController = NSArrayController()
-    @objc dynamic var managedObjectContext = (NSApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    
+
+    let arrayController = ViewArrayController()
+    let moc = (NSApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+
     @objc dynamic var canAddView = true
-    @objc dynamic var canRemoveView = true
+    @objc dynamic var canDeleteView = true
     @objc dynamic var objCount = 0
 
-
-    
     init() {
-        
-//        self.arrayController.bind(NSBindingName.managedObjectContext, to: managedObjectContext, withKeyPath: "self", options: nil)
-//        self.arrayController.bind(NSBindingName.managedObjectContext, to: self.managedObjectContext, withKeyPath: "@managedObjectContext", options: nil)
-        
-        
+        arrayController.managedObjectContext = moc
+        arrayController.bind(NSBindingName.managedObjectContext, to: moc, withKeyPath: "self", options: nil)
+        arrayController.entityName = "View"
+        arrayController.automaticallyPreparesContent = true
+        arrayController.avoidsEmptySelection = true
+        arrayController.preservesSelection = true
+        arrayController.selectsInsertedObjects = true
+        arrayController.clearsFilterPredicateOnInsertion = true
+        arrayController.usesLazyFetching = false
+        arrayController.fetch(nil)
     }
-}
-//viewsTableView!.bind(NSBindingName.sortDescriptors, to: viewModel.arrayController, withKeyPath: "sortDescriptors", options: nil)
 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+//    init() {
+//        let moc = (NSApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+//        arrayController = NSArrayController()
+//        arrayController.managedObjectContext = moc
+//        arrayController.bind(NSBindingName.managedObjectContext, to: moc, withKeyPath: "self", options: nil)
+//        arrayController.entityName = "View"
+//        arrayController.automaticallyPreparesContent = true
+//        arrayController.avoidsEmptySelection = true
+//        arrayController.preservesSelection = true
+//        arrayController.selectsInsertedObjects = true
+//        arrayController.clearsFilterPredicateOnInsertion = true
+//        arrayController.usesLazyFetching = false
+//        arrayController.fetch(nil)
+//
+////        self.arrayController.bind(NSBindingName.managedObjectContext, to: managedObjectContext, withKeyPath: "self", options: nil)
+////        self.arrayController.bind(NSBindingName.managedObjectContext, to: self.managedObjectContext, withKeyPath: "@managedObjectContext", options: nil)
+//
+//
+//    }
