@@ -13,22 +13,33 @@ import CoreData
 class ManageViewsView: NSView, LoadableView{
     var viewModel = ViewModel()
     
+    @objc dynamic var canAddView = true
+    @objc dynamic var canDeleteView = true
+    @objc dynamic var objCount = 0
+    
     @IBOutlet weak var viewsTableView: NSTableView!
     @IBOutlet weak var addButton: NSButton!
     @IBOutlet weak var deleteButton: NSButton!
     
-    @IBAction func addViewClicked(_ sender: NSButton) {
+    @IBAction func addButtonClicked(_ sender: NSButton) {
         let view = View(context: viewModel.moc)
         view.name = "my bookstore"
         view.id = ""
         view.service_email = ""
         view.now = true
+        view.day = true
         viewModel.arrayController.addObject(view)
-        
     }
     
-    @IBAction func deleteViewClicked(_ sender: NSButton) {
-        viewModel.arrayController.remove(viewModel.arrayController.selectedObjects.first)
+    @IBAction func deleteButtonClicked(_ sender: NSButton) {
+        if let selectedObject = viewModel.arrayController.selectedObjects.first {
+            viewModel.arrayController.removeObject(selectedObject)
+            
+        }
+    }
+    
+    @IBAction func doneButtonClicked(_ sender: NSButton) {
+        self.window?.close()
     }
     
     override init(frame frameRect: NSRect) {
@@ -41,8 +52,9 @@ class ManageViewsView: NSView, LoadableView{
             viewsTableView.bind(NSBindingName.content, to: viewModel.arrayController, withKeyPath: "arrangedObjects", options: nil)
             viewsTableView.bind(NSBindingName.selectionIndexes, to: viewModel.arrayController, withKeyPath:"selectionIndexes", options: nil)
             viewsTableView.bind(NSBindingName.sortDescriptors, to: viewModel.arrayController, withKeyPath: "sortDescriptors", options: nil)
-            addButton.bind(NSBindingName.enabled, to: viewModel.canAddView, withKeyPath: "self", options: nil)
-            deleteButton.bind(NSBindingName.enabled, to: viewModel.canDeleteView, withKeyPath: "self", options: nil)
+            addButton.bind(NSBindingName.enabled, to: self, withKeyPath: "canAddView", options: nil)
+            deleteButton.bind(NSBindingName.enabled, to: self, withKeyPath: "canDeleteView", options: nil)
+            
             
             loadViews()
         }
@@ -55,18 +67,17 @@ class ManageViewsView: NSView, LoadableView{
     }
 
     func updateCount() {
-        viewModel.objCount = (viewModel.arrayController.arrangedObjects as AnyObject).count
-        let count = viewModel.objCount
-
-        if count == 1 {
-            viewModel.canAddView = true
-            viewModel.canDeleteView = false
-        } else if count > 1 && count < 5 {
-            viewModel.canDeleteView = true
-        } else {
-            viewModel.canAddView = false
-        }
-
+        objCount = (viewModel.arrayController.arrangedObjects as AnyObject).count 
+            if objCount == 1 {
+                canAddView = true
+                canDeleteView = false
+            } else if objCount > 1 && objCount < 5 {
+                canAddView = true
+                canDeleteView = true
+            } else {
+                canAddView = false
+            }
+    
     }
 
     

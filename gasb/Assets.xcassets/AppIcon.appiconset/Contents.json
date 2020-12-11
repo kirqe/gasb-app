@@ -33,25 +33,25 @@
     {
       "size" : "256x256",
       "idiom" : "mac",
-      "filename" : "Gamp@0,5x-1.png",
+      "filename" : "Gamp@0.5x.png",
       "scale" : "1x"
     },
     {
       "size" : "256x256",
       "idiom" : "mac",
-      "filename" : "Gamp-1.png",
+      "filename" : "Gasb-2.png",
       "scale" : "2x"
     },
     {
       "size" : "512x512",
       "idiom" : "mac",
-      "filename" : "Gamp.png",
+      "filename" : "Gasb.png",
       "scale" : "1x"
     },
     {
       "size" : "512x512",
       "idiom" : "mac",
-      "filename" : "Gamp@2x.png",
+      "filename" : "Gasb@2x.png",
       "scale" : "2x"
     }
   ],

@@ -19,8 +19,9 @@ class ViewArrayController:  NSArrayController {
         }
     }
     
-    override func remove(atArrangedObjectIndex index: Int) {
-        super.remove(atArrangedObjectIndex: index)
+
+    override func removeObject(_ object: Any) {
+        super.remove(object)
         do {
             try managedObjectContext?.save()
         } catch {

@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		07115325256D30E7004BA215 /* AddViewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07115324256D30E7004BA215 /* AddViewView.swift */; };
-		07115327256D30F7004BA215 /* AddViewView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07115326256D30F7004BA215 /* AddViewView.xib */; };
 		0711532B256D3B84004BA215 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0711532A256D3B83004BA215 /* ViewController.swift */; };
 		07115332256D6051004BA215 /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07115331256D6051004BA215 /* Response.swift */; };
 		0717838B256FEDAB00BB6FB2 /* TableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0717838A256FEDAB00BB6FB2 /* TableTextField.swift */; };
@@ -20,9 +18,9 @@
 		07462A73256C55E900979375 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07462A72256C55E900979375 /* CustomTextField.swift */; };
 		07462A76256C7A6B00979375 /* ViewStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07462A75256C7A6B00979375 /* ViewStatsView.swift */; };
 		07462A78256C7A8000979375 /* ViewStatsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07462A77256C7A8000979375 /* ViewStatsView.xib */; };
-		075245D4256EA0AE008F9F0A /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075245D3256EA0AE008F9F0A /* DataManager.swift */; };
 		075245DB256EA2D2008F9F0A /* View+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075245D9256EA2D2008F9F0A /* View+CoreDataClass.swift */; };
 		075245DC256EA2D2008F9F0A /* View+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075245DA256EA2D2008F9F0A /* View+CoreDataProperties.swift */; };
+		0753849B2571575200B62EF7 /* ViewStatsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0753849A2571575200B62EF7 /* ViewStatsViewModel.swift */; };
 		07599856256E815900FB60B8 /* gasb.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 07599836256E71F600FB60B8 /* gasb.xcdatamodeld */; };
 		0759985C256E872900FB60B8 /* ViewArrayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0759985B256E872900FB60B8 /* ViewArrayController.swift */; };
 		07A20BB2256984710009EAC2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A20BB1256984710009EAC2 /* AppDelegate.swift */; };
@@ -31,8 +29,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		07115324256D30E7004BA215 /* AddViewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewView.swift; sourceTree = "<group>"; };
-		07115326256D30F7004BA215 /* AddViewView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AddViewView.xib; sourceTree = "<group>"; };
 		0711532A256D3B83004BA215 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		07115331256D6051004BA215 /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		0717838A256FEDAB00BB6FB2 /* TableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableTextField.swift; sourceTree = "<group>"; };
@@ -44,9 +40,9 @@
 		07462A72256C55E900979375 /* CustomTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		07462A75256C7A6B00979375 /* ViewStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewStatsView.swift; sourceTree = "<group>"; };
 		07462A77256C7A8000979375 /* ViewStatsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ViewStatsView.xib; sourceTree = "<group>"; };
-		075245D3256EA0AE008F9F0A /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		075245D9256EA2D2008F9F0A /* View+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+CoreDataClass.swift"; sourceTree = "<group>"; };
 		075245DA256EA2D2008F9F0A /* View+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0753849A2571575200B62EF7 /* ViewStatsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewStatsViewModel.swift; sourceTree = "<group>"; };
 		07599837256E71F600FB60B8 /* gasb.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = gasb.xcdatamodel; sourceTree = "<group>"; };
 		0759985B256E872900FB60B8 /* ViewArrayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewArrayController.swift; sourceTree = "<group>"; };
 		07A20BAE256984710009EAC2 /* gasb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gasb.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -80,6 +76,7 @@
 			isa = PBXGroup;
 			children = (
 				07235A92256E594600449CE8 /* ViewModel.swift */,
+				0753849A2571575200B62EF7 /* ViewStatsViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -107,8 +104,6 @@
 			children = (
 				07462A75256C7A6B00979375 /* ViewStatsView.swift */,
 				07462A77256C7A8000979375 /* ViewStatsView.xib */,
-				07115324256D30E7004BA215 /* AddViewView.swift */,
-				07115326256D30F7004BA215 /* AddViewView.xib */,
 				07462A68256BFF8400979375 /* ManageViewsView.swift */,
 				07462A6E256C087F00979375 /* ManageViewsView.xib */,
 			);
@@ -157,7 +152,6 @@
 				07A20BB9256984730009EAC2 /* gasb.entitlements */,
 				07599836256E71F600FB60B8 /* gasb.xcdatamodeld */,
 				0759985B256E872900FB60B8 /* ViewArrayController.swift */,
-				075245D3256EA0AE008F9F0A /* DataManager.swift */,
 			);
 			path = gasb;
 			sourceTree = "<group>";
@@ -224,7 +218,6 @@
 				07462A78256C7A8000979375 /* ViewStatsView.xib in Resources */,
 				07A20BB7256984730009EAC2 /* MainMenu.xib in Resources */,
 				07462A6F256C087F00979375 /* ManageViewsView.xib in Resources */,
-				07115327256D30F7004BA215 /* AddViewView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -236,12 +229,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				0711532B256D3B84004BA215 /* ViewController.swift in Sources */,
-				075245D4256EA0AE008F9F0A /* DataManager.swift in Sources */,
 				075245DC256EA2D2008F9F0A /* View+CoreDataProperties.swift in Sources */,
 				07235A93256E594600449CE8 /* ViewModel.swift in Sources */,
 				07462A69256BFF8400979375 /* ManageViewsView.swift in Sources */,
 				0759985C256E872900FB60B8 /* ViewArrayController.swift in Sources */,
-				07115325256D30E7004BA215 /* AddViewView.swift in Sources */,
 				0717838B256FEDAB00BB6FB2 /* TableTextField.swift in Sources */,
 				07462A67256BFF0100979375 /* LoadableView.swift in Sources */,
 				07115332256D6051004BA215 /* Response.swift in Sources */,
@@ -250,6 +241,7 @@
 				075245DB256EA2D2008F9F0A /* View+CoreDataClass.swift in Sources */,
 				0717838D25700FB900BB6FB2 /* TableCheckbox.swift in Sources */,
 				07462A76256C7A6B00979375 /* ViewStatsView.swift in Sources */,
+				0753849B2571575200B62EF7 /* ViewStatsViewModel.swift in Sources */,
 				07A20BB2256984710009EAC2 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

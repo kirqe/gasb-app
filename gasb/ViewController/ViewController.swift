@@ -30,10 +30,12 @@ class ViewController: NSViewController {
     
     override func viewWillAppear() {
         super.viewWillAppear()
-
+        
+        view.window?.titlebarAppearsTransparent = true
         view.window?.styleMask.remove(.resizable)
         view.window?.styleMask.remove(.miniaturizable)
-        view.window?.center()      
+        view.window?.center()
+        
     }
     
 }
