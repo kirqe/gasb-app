@@ -67,7 +67,7 @@ class ViewStatsViewModel {
     
     
     fileprivate func call_api(term: String, service_email: String) {
-        guard let url = URL(string: "http://localhost:9292/status/\(term)?ce=\(service_email)")
+        guard let url = URL(string: "http://localhost:9292/status/\(term)?e=\(service_email)")
             else {
             print("invalid URL")
             return

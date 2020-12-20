@@ -12,7 +12,8 @@ import CoreData
 
 class ViewModel {
     let arrayController = ViewArrayController()
-    let moc = (NSApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+//    let moc = (NSApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    let moc = CoreDataManager.shared.persistentContainer.viewContext
     
     init() {
         arrayController.managedObjectContext = moc

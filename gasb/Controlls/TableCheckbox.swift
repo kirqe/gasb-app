@@ -9,7 +9,7 @@
 import Cocoa
 
 class TableCheckbox: NSButton {
-    let managedObjectContext = (NSApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    let managedObjectContext = CoreDataManager.shared.persistentContainer.viewContext
     
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
