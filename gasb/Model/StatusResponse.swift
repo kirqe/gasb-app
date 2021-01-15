@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Response: Codable {
+struct StatusResponse: Codable {
     var term: String?
     var value: Int?
     var updated_at: String?

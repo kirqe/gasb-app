@@ -15,10 +15,9 @@ class ViewStatsView: NSView, LoadableView {
     @IBOutlet weak var dayLabel: NSTextField?
     @IBOutlet weak var weekLabel: NSTextField?
     @IBOutlet weak var monthLabel: NSTextField?
-    
-    var timer: Timer?
+
     var viewItem: View?
-    var viewStatsViewModel: ViewStatsViewModel?
+    var viewModel: ViewStatsViewModel?
     var viewHeight: CGFloat!
     
 //    override init(frame frameRect: NSRect) {
@@ -26,10 +25,14 @@ class ViewStatsView: NSView, LoadableView {
 //        _ = load(fromNIBNamed: "ViewStatsView")
 //    }
     
-    init(frame frameRect: NSRect, viewItem: View) {
+    init(frame frameRect: NSRect, viewModel: ViewStatsViewModel) {
         super.init(frame: frameRect)
-        self.viewItem = viewItem
         
+        self.viewModel = viewModel
+        self.viewItem = viewModel.view
+        guard let viewItem = self.viewItem else { return }
+        
+        // hide unused labels
         viewHeight = [
             viewItem.now,
             viewItem.day,
@@ -38,80 +41,75 @@ class ViewStatsView: NSView, LoadableView {
 
         self.frame = NSRect(x: frameRect.maxX, y: frameRect.maxY, width: frameRect.width, height: frameRect.height - viewHeight)
         
-        viewStatsViewModel = ViewStatsViewModel(view: viewItem)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadLabels), name: Notification.Name("ViewStatsVMValuesUpdated"), object: nil )
         
         _ = load(fromNIBNamed: "ViewStatsView")
-//        NotificationCenter.default.addObserver(self, selector: #selector(reloadLabels), name: Notification.Name("updatedDataNotification"), object: nil)
-//        reloadLabels()
+       
+        DispatchQueue.main.async {
+            if let name = viewItem.name {
+                self.name.stringValue = name
+            }
+        }
+        
+        reloadLabels()
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func showNotification(name: String, views: Int) -> Void {
-        let notification = NSUserNotification()
-        notification.title = "\(name) got views"
-        notification.subtitle = "Property has \(views) active users"
-        notification.soundName = NSUserNotificationDefaultSoundName
-        NSUserNotificationCenter.default.deliver(notification)
-    }
+//    func showNotification(name: String, views: Int) -> Void {
+//        let notification = NSUserNotification()
+//        notification.title = "\(name) got views"
+//        notification.subtitle = "Property has \(views) active users"
+//        notification.soundName = NSUserNotificationDefaultSoundName
+//        NSUserNotificationCenter.default.deliver(notification)
+//    }
     
-    @objc fileprivate func reloadLabels() {
-        // get data from view model
-        if let name = viewItem?.name {
-            self.name.stringValue = name
-        }
+    @objc func reloadLabels() {
+        print("reload")
         
-        if let now = viewItem?.now {
-            if !now {
-                self.nowLabel?.superview?.removeFromSuperview()
-            }
-            if let nowLabel = viewStatsViewModel?.nowValue {
-                self.nowLabel?.stringValue = "\(nowLabel)"
+        
+        if let vsVM = self.viewModel {
+            DispatchQueue.main.async {
+                // NOW
+                if let now = vsVM.now {
+                    if !now {
+                        self.nowLabel?.superview?.removeFromSuperview()
+                    }
+
+                    self.nowLabel?.stringValue = "\(vsVM.nowValue ?? 0)"
+                }
+                
+                // DAY
+                if let day = vsVM.day {
+                    if !day {
+                        self.dayLabel?.superview?.removeFromSuperview()
+                    }
+
+                    self.dayLabel?.stringValue = "\(vsVM.dayValue ?? 0)"
+                }
+                
+                // WEEK
+                if let week = vsVM.week {
+                    if !week {
+                        self.weekLabel?.superview?.removeFromSuperview()
+                    }
+
+                    self.weekLabel?.stringValue = "\(vsVM.weekValue ?? 0)"
+                }
+                
+                // MONTH
+                if let month = vsVM.month {
+                    if !month {
+                        self.monthLabel?.superview?.removeFromSuperview()
+                    }
+
+                    self.monthLabel?.stringValue = "\(vsVM.monthValue ?? 0)"
+                }
+                
             }
         }
-        
-        if let day = viewItem?.day {
-            if !day {
-                self.dayLabel?.superview?.removeFromSuperview()
-            }
-            if let dayLabel = viewStatsViewModel?.dayValue {
-                self.dayLabel?.stringValue = "\(dayLabel)"
-            }
-        }
-        
-        if let week = viewItem?.week {
-            if !week {
-                self.weekLabel?.superview?.removeFromSuperview()
-            }
-            if let weekLabel = viewStatsViewModel?.weekValue {
-                self.weekLabel?.stringValue = "\(weekLabel)"
-            }
-        }
-        
-        if let month = viewItem?.month {
-            if !month {
-                self.monthLabel?.superview?.removeFromSuperview()
-            }
-            if let monthValue = viewStatsViewModel?.monthValue {
-                self.monthLabel?.stringValue = "\(monthValue)"
-            }
-        }
-        
     }
-    
-    func startTimer() {
-        
-        reloadLabels()
-        
-        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(reloadLabels), userInfo: nil, repeats: true)
-        timer?.fire()
-        RunLoop.current.add(timer!, forMode: .common)
-    }
-    
-    func stopTimer() {
-        timer?.invalidate()
-        timer = nil
-    }
+
 }

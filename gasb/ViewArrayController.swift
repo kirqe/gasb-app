@@ -14,6 +14,7 @@ class ViewArrayController:  NSArrayController {
         super.addObject(object)
         do {
             try managedObjectContext?.save()
+            
         } catch {
             print("error saving object #ViewArrayController")
         }
@@ -24,6 +25,7 @@ class ViewArrayController:  NSArrayController {
         super.remove(object)
         do {
             try managedObjectContext?.save()
+            NotificationCenter.default.post(name: Notification.Name("ViewsRecordsUpdated"), object: nil, userInfo: nil)
         } catch {
             print("error removing object #ViewArrayController")
         }

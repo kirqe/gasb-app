@@ -11,31 +11,31 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     // vms
-    var viewModel: ViewModel?
-    
+    var viewModel: ViewModel = ViewModel()
+    var session = Session()
+
     // menu
     var statusItem: NSStatusItem?
     var menu: NSMenu!
     
     // timers
     var refreshDataTimer: Timer? // main timer
-    var pingTimer: Timer? // runs evey second to refresh data
+    var drawTimer: Timer?
     
     // views and windows
     lazy var manageViewWindow = NSWindow()
-//    var viewStatsView: ViewStatsView?
-    var views: [ViewStatsView] = []
+    lazy var accessViewWindow = NSWindow()
+    
+
+    var items: [View] = [] // view items from coreData
+    var statsViewModels: [ViewStatsViewModel] = []
+    var store: Store = Store() // ["now:12345": 10, "day:12345": 22]
+    
     var paused = false
+    var menuOpened = false
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        viewModel = ViewModel()
-        var request: NSFetchRequest = View.fetchRequest()
-        do {
-            try viewModel?.moc.fetch(request)
-        } catch {
-            print("")
-        }
-        
+        // items = viewModel.arrayController.arrangedObjects as! [View]
         UserDefaults.standard.set(true, forKey: "NSConstraintBasedLayoutVisualizeMutuallyExclusiveConstraints")
         
         startMainTimer()
@@ -47,33 +47,36 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         configureStatusItem()
 
         configureMenuItems()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(setItems), name: Notification.Name("ViewsRecordsUpdated"), object: nil )
 
     }
     
+    @objc func setItems() {
+        statsViewModels.removeAll()
+        items = viewModel.arrayController.arrangedObjects as! [View]
+        for item in items {
+            let statsViewModel = ViewStatsViewModel(view: item, store: store) // pass existing data here?
+            statsViewModels.append(statsViewModel)
+        }
+    }
+    
+    
     // MARK: - Timers
     func startMainTimer() {
-        pingTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateStatusData), userInfo: nil, repeats: true)
-        pingTimer?.fire()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.setItems() // take views from coreData
+            self.updateDataForViews() // fetch new data on initial launch
+        }
         
-        refreshDataTimer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(updateDataForViews), userInfo: nil, repeats: true)
+        drawTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateStatusData), userInfo: nil, repeats: true)
+        drawTimer?.fire()
+        
+        refreshDataTimer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(updateDataForViews), userInfo: nil, repeats: true)
         refreshDataTimer?.fire()
+        
         RunLoop.current.add(refreshDataTimer!, forMode: .common)
     }
-    
-    func stopMainTimer() {
-        refreshDataTimer?.invalidate()
-        refreshDataTimer = nil
-    }
-    
-    func startViewTimers() {
-        
-        
-    }
-    
-    func stopViewTimers() {
-    
-    }
-    
         
     // MARK: - Configure Status Item
     func configureStatusItem() {
@@ -88,33 +91,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         itemImage?.isTemplate = true
         statusItem?.button?.image = itemImage
         statusItem?.button?.imagePosition = NSControl.ImagePosition.imageLeft
-         
-//        let paragraphStyle = NSMutableParagraphStyle()
-//        paragraphStyle.maximumLineHeight = 9
-//        paragraphStyle.alignment = .right
-//
-//        let textAttr = [
-//            NSAttributedString.Key.font: NSFont.systemFont(ofSize: 9, weight: NSFont.Weight.ultraLight),
-//        ]
-//
-//        let row1 = NSAttributedString(string: "\n \u{2010}", attributes: textAttr)
-//        let row2 = NSAttributedString(string: "\n \u{2010}", attributes: textAttr)
-//
-//        var rows = NSMutableAttributedString(attributedString: NSAttributedString(string: ""))
-//        rows.append(row1)
-//        rows.append(row2)
-//
-//        rows.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range:NSMakeRange(0, rows.length))
-//        rows.addAttribute(NSAttributedString.Key.baselineOffset, value: 2.0, range:NSMakeRange(0, rows.length))
-//
-//        statusItem?.button?.attributedTitle = rows
     }
     
     @objc func updateStatusData() {
+        
         // Status Bar Data
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.maximumLineHeight = 9
-        paragraphStyle.alignment = .justified
+        paragraphStyle.alignment = .right
 
         let textAttr = [
             NSAttributedString.Key.font: NSFont.systemFont(ofSize: 9, weight: NSFont.Weight.ultraLight),
@@ -122,18 +106,35 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
         var top: [String] = []
         var bot: [String] = []
-        
-        let items = viewModel?.arrayController.arrangedObjects as! [View]
-        print(items.count)
-        for item in items {
-            let now = UserDefaults.standard.string(forKey: "now:\(item.id!)") ?? "\u{2010}"
-            let day = UserDefaults.standard.string(forKey: "day:\(item.id!)") ?? "\u{2010}"
-            top.append(now)
-            bot.append(day)
-        }
 
-        let row1 = NSAttributedString(string: "\n" + top.joined(separator: " \u{2022} "), attributes: textAttr)
-        let row2 = NSAttributedString(string: "\n" + bot.joined(separator: " \u{2022} "), attributes: textAttr)
+        for item in statsViewModels {
+    
+            if item.now! || item.day! {
+                var now = item.now! ? "\(item.nowValue ?? 0)" : "\u{2010}"
+                var day = item.day! ? "\(item.dayValue ?? 0)" : "\u{2010}"
+
+                if now.count > day.count {
+                    var spacing = (now.count - day.count)
+                    while spacing > 0 {
+                        day = "\u{00A0}\u{00A0}" + day
+                        spacing -= 1
+                    }
+                    
+                } else {
+                    var spacing = (day.count - now.count)
+                    while spacing > 0 {
+                        now = "\u{00A0}\u{00A0}" + now
+                        spacing -= 1
+                    }
+                }
+                
+                top.append(now)
+                bot.append(day)
+            }
+        }
+        //                                                                 - • -
+        let row1 = NSAttributedString(string: "\n" + top.joined(separator: "\u{00A0}\u{2022}\u{00A0}"), attributes: textAttr)
+        let row2 = NSAttributedString(string: "\n" + bot.joined(separator: "\u{00A0}\u{2022}\u{00A0}"), attributes: textAttr)
         
         var rows = NSMutableAttributedString(attributedString: NSAttributedString(string: ""))
         rows.append(row1)
@@ -152,12 +153,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         menu?.addItem(NSMenuItem.separator())
         menu?.addItem(withTitle: "Manage Views", action: #selector(openManageViewsView), keyEquivalent: "")
         
-        let pauseBtn = NSMenuItem(title: "Pause", action: #selector(pauseChecking), keyEquivalent: "")
+        let pauseBtn = NSMenuItem(title: "Pause", action: #selector(togglePause), keyEquivalent: "")
         if paused {
             pauseBtn.title = "Resume"
         }
             
         menu?.addItem(pauseBtn)
+        menu?.addItem(NSMenuItem.separator())
+        menu?.addItem(withTitle: "Authenticate", action: #selector(openAccessView), keyEquivalent: "")
         menu?.addItem(NSMenuItem.separator())
         menu?.addItem(withTitle: "About gasb", action: #selector(openAbout), keyEquivalent: "")
         menu?.addItem(withTitle: "Quit gasb", action: #selector(quitApp), keyEquivalent: "")
@@ -165,52 +168,38 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     
     
     func updateMenuItems() { // redraw
-        
-        let items = viewModel?.arrayController.arrangedObjects as! [View]
-        
-        for viewItem in items {
-            if (viewItem.id != nil) && (viewItem.service_email != nil) && (viewItem.now || viewItem.day || viewItem.week || viewItem.month) {
-                let menuItem = NSMenuItem()
-                
-                let vsv = ViewStatsView(frame: NSRect(x: 0.0, y: 0.0, width: 200.0, height: 130), viewItem: viewItem)
-                
-                
-                vsv.startTimer() // view specific timer that just take data from userdefaults every n seconds
-                views.append(vsv)
-                
-                menuItem.view = vsv
-                menu?.addItem(menuItem)
-                menu?.addItem(NSMenuItem.separator())
-            }
+        for statsViewModel in statsViewModels { // statsViewModels
+            let menuItem = NSMenuItem()
+            let vsv = ViewStatsView(frame: NSRect(x: 0.0, y: 0.0, width: 200.0, height: 130), viewModel: statsViewModel)
+            
+            menuItem.view = vsv
+            menu?.addItem(menuItem)
+            menu?.addItem(NSMenuItem.separator())
         }
+        
         configureMenuItems()
     }
     
     @objc func updateDataForViews() {
         updateStatusData()
-        let items = viewModel?.arrayController.arrangedObjects as! [View]
+        print("updateDataForViews")
         
-        for viewItem in items {
-            let vsVM = ViewStatsViewModel(view: viewItem)
+        let group = DispatchGroup()
+        for statsViewModel in statsViewModels {
+            if (!statsViewModel.id.isEmpty) &&
+                (!statsViewModel.service_email.isEmpty) &&
+                (statsViewModel.now! || statsViewModel.day! || statsViewModel.week! || statsViewModel.month!) {
+                
+                for kind in Kind.allCases {
+                    group.enter()
+                    statsViewModel.updateValue(kind: kind, session: session, store: store) { group.leave() }
+
+                }
+            }
             
-            if viewItem.now {
-                vsVM.update(.now)
-            }
-            if viewItem.day {
-                vsVM.update(.day)
-            }
-            if viewItem.week {
-                vsVM.update(.week)
-            }
-            if viewItem.month {
-                vsVM.update(.month)
-            }
-//            vsVM.updateValues()
-//            NotificationCenter.default.post(name: NSNotification.Name("updatedDataNotification"), object: nil)
         }
     }
-
-
+    
 
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
@@ -218,12 +207,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-
-        
     }
 
     @objc func statusBarButtonClicked(sender: NSStatusBarButton) {
-        
+        menuOpened = true
         if let menu = menu {
             menu.removeAllItems()
             statusItem?.menu = menu // add menu to button...
@@ -234,14 +221,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     }
 
     @objc func menuDidClose(_ menu: NSMenu) {
-        views.forEach({ $0.stopTimer() })
+        menuOpened = false
+//        views.forEach({ $0.stopTimer() })
         statusItem?.menu = nil // remove menu so button works as before
     }
-    
 
-
-
-    
     
     // MARK: - Handling clicking on menuItems
 
@@ -262,16 +246,39 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         }
     }
     
-    @objc func pauseChecking() {
-        paused = !paused
+    @objc func togglePause() {
         if paused {
-            refreshDataTimer?.invalidate()
-            
             statusItem?.button?.attributedTitle = NSAttributedString(string: "paused", attributes: [NSAttributedString.Key.font: NSFont.systemFont(ofSize: 11, weight: NSFont.Weight.ultraLight)])
             
+            refreshDataTimer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(updateDataForViews), userInfo: nil, repeats: true)
+             refreshDataTimer?.fire()
+            
+            RunLoop.current.add(refreshDataTimer!, forMode: .common)
+            
+            paused = false
         } else {
-            refreshDataTimer?.fire()
+            refreshDataTimer?.invalidate()
+            
+            paused = true
         }
+    }
+    
+    @objc func openAccessView() {
+        let vc = ViewController()
+        vc.view = NSView(frame: NSRect(x: 0.0, y: 0.0, width: 330, height: 210))
+
+        
+        if NSApp.windows.contains(accessViewWindow) {
+            accessViewWindow.makeKeyAndOrderFront(self)
+        } else {
+            accessViewWindow = NSWindow(contentViewController: vc)
+            let accessView = AccessView()
+            accessView.add(toView: vc.view)
+            
+            accessViewWindow.title = "Access"
+            accessViewWindow.makeKeyAndOrderFront(self)
+        }
+        
     }
     
     @objc func openAbout() {

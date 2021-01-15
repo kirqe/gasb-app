@@ -7,105 +7,92 @@
 //
 
 import Foundation
+import KeychainSwift
 
-
-enum Kind {
+enum Kind: String, CaseIterable {
     case now
     case day
     case week
     case month
 }
 
-
 class ViewStatsViewModel {
-    let defaults = UserDefaults.standard
-//    var viewItem: View
+    var view: View?
     
-    var id: String?
-    var service_email: String?
+    var id: String
+    var service_email: String
     
-    var nowValue: Int?
-    var dayValue: Int?
-    var weekValue: Int?
-    var monthValue: Int?
     
-    var counter = 0
-    var timer: Timer?
-    
-    init(view: View) {
-//        self.viewItem = viewItem
-        
-        self.id = view.id
-        self.service_email = view.service_email
-        
-
-        updateValues()
-//       NotificationCenter.default.addObserver(self, selector: #selector(updateValues), name: Notification.Name("updatedDataNotification"), object: nil)
+    var nowValue: Int? {
+        didSet {
+            valueDidUpdate(key: "now:\(self.id)", value: self.nowValue ?? 0)
+        }
     }
-
-    @objc func updateValues() {
-        print("update labels")
-        self.nowValue = self.defaults.integer(forKey: "now:\(self.id!)")
-        self.dayValue = self.defaults.integer(forKey: "day:\(self.id!)")
-        self.weekValue = self.defaults.integer(forKey: "week:\(self.id!)")
-        self.monthValue = self.defaults.integer(forKey: "month:\(self.id!)")
+    var dayValue: Int? {
+        didSet {
+            valueDidUpdate(key: "day:\(self.id)", value: self.dayValue ?? 0)
+        }
     }
-    
-    func update(_ kind: Kind) {
-        print("call api")
-        switch kind {
-        case .now:
-            call_api(term: "now:\(self.id!)", service_email: self.service_email!)
-        case .day:
-            call_api(term: "day:\(self.id!)", service_email: self.service_email!)
-        case .week:
-            call_api(term: "week:\(self.id!)", service_email: self.service_email!)
-        case .month:
-            call_api(term: "month:\(self.id!)", service_email: self.service_email!)
+    var weekValue: Int? {
+        didSet {
+            valueDidUpdate(key: "week:\(self.id)", value: self.weekValue ?? 0)
+        }
+    }
+    var monthValue: Int? {
+        didSet {
+            valueDidUpdate(key: "month:\(self.id)", value: self.monthValue ?? 0)
         }
     }
     
+    // show or hide certain fields
+    var now: Bool?
+    var day: Bool?
+    var week: Bool?
+    var month: Bool?
     
-    fileprivate func call_api(term: String, service_email: String) {
-        guard let url = URL(string: "http://localhost:9292/status/\(term)?e=\(service_email)")
-            else {
-            print("invalid URL")
-            return
-        }
- 
-        let request = URLRequest(url: url)
+    init(view: View, store: Store) {
+        self.view = view
         
-        URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
-            guard error == nil else {
-                     print(error)
-                     return
-                 }
-            if let data = data {
-
-                if let decodeResponse = try? JSONDecoder().decode(Response.self, from: data) {
-                    DispatchQueue.main.async {
-                        if let value = decodeResponse.value, let term = decodeResponse.term {
-                            print("key: \(term), value: \(value)")
-                            self.defaults.set(value, forKey: term)
-                        }
-                    }
-                }
-            }
-        }).resume()
-    }
-
-    func startTimer() {
-        print("start timer VSViewModel")
-        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateValues), userInfo: nil, repeats: true)
-        timer?.fire()
-
-        RunLoop.current.add(timer!, forMode: .common)
-    }
-
-    func stopTimer() {
-        print("stop timer VSViewModel")
-        timer?.invalidate()
-        timer = nil
+        self.id = view.id ?? ""
+        self.service_email = view.service_email ?? ""
+        
+        self.now = view.now
+        self.day = view.day
+        self.week = view.week
+        self.month = view.month
+        
+        self.nowValue = store.get(key: "now:\(self.id)")
+        self.dayValue = store.get(key: "day:\(self.id)")
+        self.weekValue = store.get(key: "week:\(self.id)")
+        self.monthValue = store.get(key: "month:\(self.id)")
     }
     
+    private func valueDidUpdate(key: String, value: Int) {
+        print("call valueDidUpdate")
+        NotificationCenter.default.post(name: NSNotification.Name("ViewStatsVMValuesUpdated"), object: nil, userInfo: [key: value])
+    }
+    
+    func updateValue(kind: Kind, session: Session, store: Store, completion: @escaping() -> ()) {
+        let term = kind.rawValue + ":" + self.id
+            
+        session.makeRequest(url: "http://localhost:9292/api/status/\(term)?e=\(self.service_email)") { object in
+            if let value = object.value, let term = object.term  {
+                print("key: \(term), value: \(value)")
+                store.set(key: term, value: value)
+                            
+                self.reloadValuesFrom(store: store)
+                            
+             }
+            completion()
+        }
+    }
+    
+    func reloadValuesFrom(store: Store) {
+        self.nowValue = store.get(key: "now:\(self.id)")
+        self.dayValue = store.get(key: "day:\(self.id)")
+        self.weekValue = store.get(key: "week:\(self.id)")
+        self.monthValue = store.get(key: "month:\(self.id)")
+    }
 }
+
+

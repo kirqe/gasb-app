@@ -33,8 +33,7 @@ class ManageViewsView: NSView, LoadableView{
     
     @IBAction func deleteButtonClicked(_ sender: NSButton) {
         if let selectedObject = viewModel.arrayController.selectedObjects.first {
-            viewModel.arrayController.removeObject(selectedObject)
-            
+            viewModel.arrayController.removeObject(selectedObject)            
         }
     }
     
@@ -45,7 +44,6 @@ class ManageViewsView: NSView, LoadableView{
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
 
-
         if load(fromNIBNamed: "ManageViewsView") {
 
             viewModel.arrayController.addObserver(self, forKeyPath: "arrangedObjects.@count", options: NSKeyValueObservingOptions.new, context: nil)
@@ -54,7 +52,6 @@ class ManageViewsView: NSView, LoadableView{
             viewsTableView.bind(NSBindingName.sortDescriptors, to: viewModel.arrayController, withKeyPath: "sortDescriptors", options: nil)
             addButton.bind(NSBindingName.enabled, to: self, withKeyPath: "canAddView", options: nil)
             deleteButton.bind(NSBindingName.enabled, to: self, withKeyPath: "canDeleteView", options: nil)
-            
             
             loadViews()
         }
@@ -71,7 +68,7 @@ class ManageViewsView: NSView, LoadableView{
             if objCount == 1 {
                 canAddView = true
                 canDeleteView = false
-            } else if objCount > 1 && objCount < 5 {
+            } else if objCount > 1 && objCount < 3 {
                 canAddView = true
                 canDeleteView = true
             } else {

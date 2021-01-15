@@ -1,10 +1,11 @@
 //
 //  LoadableView.swift
-//  WorldTime
 //
 //  Created by Gabriel Theodoropoulos.
 //  Copyright © 2020 AppCoda. All rights reserved.
 //
+
+// Copy pasted. Could have just used controllers.
 
 import Cocoa
 

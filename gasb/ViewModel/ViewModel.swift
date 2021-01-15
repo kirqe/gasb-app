@@ -12,9 +12,9 @@ import CoreData
 
 class ViewModel {
     let arrayController = ViewArrayController()
-//    let moc = (NSApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    // let moc = (NSApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     let moc = CoreDataManager.shared.persistentContainer.viewContext
-    
+
     init() {
         arrayController.managedObjectContext = moc
         arrayController.bind(NSBindingName.managedObjectContext, to: moc, withKeyPath: "self", options: nil)
@@ -25,7 +25,6 @@ class ViewModel {
         arrayController.selectsInsertedObjects = true
         arrayController.clearsFilterPredicateOnInsertion = true
         arrayController.usesLazyFetching = false
-        arrayController.fetch(nil)
+        arrayController.fetch(nil)        
     }
-
 }

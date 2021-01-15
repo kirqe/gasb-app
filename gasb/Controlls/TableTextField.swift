@@ -22,8 +22,9 @@ class TableTextField: NSTextField {
         
         do {
             try managedObjectContext.save()
-        } catch {
-            print("")
+            NotificationCenter.default.post(name: Notification.Name("ViewsRecordsUpdated"), object: nil, userInfo: nil)
+        } catch let error {
+            print(error)
         }
     }
     
