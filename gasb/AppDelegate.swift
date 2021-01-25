@@ -49,6 +49,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         configureMenuItems()
         
         NotificationCenter.default.addObserver(self, selector: #selector(setItems), name: Notification.Name("ViewsRecordsUpdated"), object: nil )
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(pause), name: Notification.Name("InvalidCredentialsEntered"), object: nil )
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(resume), name: Notification.Name("ValidCredentialsEntered"), object: nil )
 
     }
     
@@ -87,51 +91,48 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         statusItem?.button?.action = #selector(self.statusBarButtonClicked(sender:))
         
         // Status Bar Icon
-        let itemImage = NSImage(named: "menubar2")
+        let itemImage = NSImage(named: "menubar3")
         itemImage?.isTemplate = true
         statusItem?.button?.image = itemImage
         statusItem?.button?.imagePosition = NSControl.ImagePosition.imageLeft
     }
     
     @objc func updateStatusData() {
-        
         // Status Bar Data
         let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.maximumLineHeight = 9
+        paragraphStyle.minimumLineHeight = 7
+        paragraphStyle.maximumLineHeight = 7
         paragraphStyle.alignment = .right
 
         let textAttr = [
-            NSAttributedString.Key.font: NSFont.systemFont(ofSize: 9, weight: NSFont.Weight.ultraLight),
+            NSAttributedString.Key.font: NSFont.systemFont(ofSize: 9, weight: NSFont.Weight.ultraLight)
         ]
 
         var top: [String] = []
         var bot: [String] = []
-
+        
         for item in statsViewModels {
     
             if item.now! || item.day! {
-                var now = item.now! ? "\(item.nowValue ?? 0)" : "\u{2010}"
+                var now = item.now! ? "\(item.nowValue ?? 0)" : "\u{2010}" //"\(Int.random(in: 1..<1000))" //
                 var day = item.day! ? "\(item.dayValue ?? 0)" : "\u{2010}"
-
-                if now.count > day.count {
-                    var spacing = (now.count - day.count)
-                    while spacing > 0 {
-                        day = "\u{00A0}\u{00A0}" + day
-                        spacing -= 1
-                    }
-                    
-                } else {
-                    var spacing = (day.count - now.count)
-                    while spacing > 0 {
-                        now = "\u{00A0}\u{00A0}" + now
-                        spacing -= 1
-                    }
+                var spacing = now.count > day.count ? now.count : day.count
+                                                
+                while spacing > now.count {
+                    now = "\u{00A0}\u{00A0}\u{00A0}\u{00A0}" + now
+                    spacing -= 1
                 }
                 
+                while spacing > day.count {
+                    day = "\u{00A0}\u{00A0}\u{00A0}\u{00A0}" + day
+                    spacing -= 1
+                }
+       
                 top.append(now)
                 bot.append(day)
             }
         }
+        
         //                                                                 - • -
         let row1 = NSAttributedString(string: "\n" + top.joined(separator: "\u{00A0}\u{2022}\u{00A0}"), attributes: textAttr)
         let row2 = NSAttributedString(string: "\n" + bot.joined(separator: "\u{00A0}\u{2022}\u{00A0}"), attributes: textAttr)
@@ -141,11 +142,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         rows.append(row2)
         
         rows.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range:NSMakeRange(0, rows.length))
-        rows.addAttribute(NSAttributedString.Key.baselineOffset, value: 2.0, range:NSMakeRange(0, rows.length))
+        rows.addAttribute(NSAttributedString.Key.baselineOffset, value: 3.7, range:NSMakeRange(0, rows.length))
         
         statusItem?.button?.attributedTitle = rows
         rows = NSMutableAttributedString(attributedString: NSAttributedString(string: ""))
-
     }
     
     // MARK: - Configure Menu Items
@@ -170,7 +170,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     func updateMenuItems() { // redraw
         for statsViewModel in statsViewModels { // statsViewModels
             let menuItem = NSMenuItem()
-            let vsv = ViewStatsView(frame: NSRect(x: 0.0, y: 0.0, width: 200.0, height: 130), viewModel: statsViewModel)
+            let vsv = ViewStatsView(
+                frame: NSRect(x: 0.0, y: 0.0, width: 200.0, height: 130),
+                viewModel: statsViewModel
+            )
             
             menuItem.view = vsv
             menu?.addItem(menuItem)
@@ -183,20 +186,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     @objc func updateDataForViews() {
         updateStatusData()
         print("updateDataForViews")
-        
-        let group = DispatchGroup()
-        for statsViewModel in statsViewModels {
-            if (!statsViewModel.id.isEmpty) &&
-                (!statsViewModel.service_email.isEmpty) &&
-                (statsViewModel.now! || statsViewModel.day! || statsViewModel.week! || statsViewModel.month!) {
-                
-                for kind in Kind.allCases {
-                    group.enter()
-                    statsViewModel.updateValue(kind: kind, session: session, store: store) { group.leave() }
+        if !paused {
+            let group = DispatchGroup()
+            for statsViewModel in statsViewModels {
+                if (!statsViewModel.id.isEmpty) &&
+                    (statsViewModel.now! || statsViewModel.day! || statsViewModel.week! || statsViewModel.month!) {
+                    
+                    for kind in Kind.allCases {
+                        group.enter()
+                        statsViewModel.updateValue(kind: kind, session: session, store: store) { group.leave() }
 
+                    }
                 }
+                
             }
-            
         }
     }
     
@@ -222,7 +225,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     @objc func menuDidClose(_ menu: NSMenu) {
         menuOpened = false
-//        views.forEach({ $0.stopTimer() })
         statusItem?.menu = nil // remove menu so button works as before
     }
 
@@ -232,7 +234,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     @objc func openManageViewsView() {
         let vc = ViewController()
-        vc.view = NSView(frame: NSRect(x: 0.0, y: 0.0, width: 920, height: 230))
+        vc.view = NSView(frame: NSRect(x: 0.0, y: 0.0, width: 590, height: 210))
         
         if NSApp.windows.contains(manageViewWindow) {
             manageViewWindow.makeKeyAndOrderFront(self)
@@ -246,26 +248,33 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         }
     }
     
+    
+    @objc func pause() {
+        refreshDataTimer?.invalidate()
+        paused = true
+    }
+    @objc func resume() {
+        statusItem?.button?.attributedTitle = NSAttributedString(string: "paused", attributes: [NSAttributedString.Key.font: NSFont.systemFont(ofSize: 11, weight: NSFont.Weight.ultraLight)])
+        
+        refreshDataTimer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(updateDataForViews), userInfo: nil, repeats: true)
+         refreshDataTimer?.fire()
+        
+        RunLoop.current.add(refreshDataTimer!, forMode: .common)
+        
+        paused = false
+    }
+    
     @objc func togglePause() {
         if paused {
-            statusItem?.button?.attributedTitle = NSAttributedString(string: "paused", attributes: [NSAttributedString.Key.font: NSFont.systemFont(ofSize: 11, weight: NSFont.Weight.ultraLight)])
-            
-            refreshDataTimer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(updateDataForViews), userInfo: nil, repeats: true)
-             refreshDataTimer?.fire()
-            
-            RunLoop.current.add(refreshDataTimer!, forMode: .common)
-            
-            paused = false
+            resume()
         } else {
-            refreshDataTimer?.invalidate()
-            
-            paused = true
+            pause()
         }
     }
     
     @objc func openAccessView() {
         let vc = ViewController()
-        vc.view = NSView(frame: NSRect(x: 0.0, y: 0.0, width: 330, height: 210))
+        vc.view = NSView(frame: NSRect(x: 0.0, y: 0.0, width: 330, height: 178))
 
         
         if NSApp.windows.contains(accessViewWindow) {
@@ -275,7 +284,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             let accessView = AccessView()
             accessView.add(toView: vc.view)
             
-            accessViewWindow.title = "Access"
+            accessViewWindow.title = "Login"
             accessViewWindow.makeKeyAndOrderFront(self)
         }
         

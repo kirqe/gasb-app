@@ -18,24 +18,16 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <customView wantsLayer="YES" id="c22-O7-iKe" customClass="AccessView" customModule="gasb" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="332" height="257"/>
+        <customView wantsLayer="YES" misplaced="YES" id="c22-O7-iKe" customClass="AccessView" customModule="gasb" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="332" height="178"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <progressIndicator wantsLayer="YES" maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="V60-pd-6jh">
                     <rect key="frame" x="296" y="20" width="16" height="16"/>
                 </progressIndicator>
                 <stackView distribution="fill" orientation="vertical" alignment="centerX" spacing="31" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3qy-fH-UHh">
-                    <rect key="frame" x="20" y="20" width="292" height="217"/>
+                    <rect key="frame" x="20" y="20" width="292" height="138"/>
                     <subviews>
-                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QMz-oP-ulT">
-                            <rect key="frame" x="122" y="169" width="48" height="48"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="48" id="4hm-qX-JN6"/>
-                                <constraint firstAttribute="width" constant="48" id="lYi-0u-7kg"/>
-                            </constraints>
-                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="Gasb" id="OqO-qf-jae"/>
-                        </imageView>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mba-tq-Rqd">
                             <rect key="frame" x="128" y="122" width="37" height="16"/>
                             <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="sYV-hq-Fth">
@@ -97,22 +89,20 @@
                     <visibilityPriorities>
                         <integer value="1000"/>
                         <integer value="1000"/>
-                        <integer value="1000"/>
                     </visibilityPriorities>
                     <customSpacing>
-                        <real value="3.4028234663852886e+38"/>
                         <real value="3.4028234663852886e+38"/>
                         <real value="3.4028234663852886e+38"/>
                     </customSpacing>
                 </stackView>
                 <box boxType="custom" borderType="none" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="Hma-Ut-YVW">
-                    <rect key="frame" x="0.0" y="0.0" width="332" height="257"/>
+                    <rect key="frame" x="0.0" y="0.0" width="332" height="178"/>
                     <view key="contentView" id="24M-yB-kUu">
-                        <rect key="frame" x="0.0" y="0.0" width="332" height="257"/>
+                        <rect key="frame" x="0.0" y="0.0" width="332" height="178"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CWQ-0o-anP">
-                                <rect key="frame" x="83" y="111" width="167" height="32"/>
+                                <rect key="frame" x="83" y="72" width="167" height="32"/>
                                 <buttonCell key="cell" type="push" title="Use New Credentials" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="0ja-cz-h67">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -145,7 +135,4 @@
             <point key="canvasLocation" x="168" y="51"/>
         </customView>
     </objects>
-    <resources>
-        <image name="Gasb" width="512" height="512"/>
-    </resources>
 </document>

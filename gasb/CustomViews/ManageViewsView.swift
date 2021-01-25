@@ -25,7 +25,6 @@ class ManageViewsView: NSView, LoadableView{
         let view = View(context: viewModel.moc)
         view.name = "my bookstore"
         view.id = ""
-        view.service_email = ""
         view.now = true
         view.day = true
         viewModel.arrayController.addObject(view)
@@ -41,6 +40,16 @@ class ManageViewsView: NSView, LoadableView{
         self.window?.close()
     }
     
+    @IBOutlet weak var usersMetricsRadio: NSButton!
+    @IBOutlet weak var sessionsMetricsRadio: NSButton!
+    @IBOutlet weak var pageViewsMetricsRadio: NSButton!
+    
+
+    @IBAction func setMetrics(_ sender: NSButton) {
+        UserDefaults.standard.set(sender.title, forKey: "metric")
+    }
+    
+    
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
 
@@ -54,6 +63,20 @@ class ManageViewsView: NSView, LoadableView{
             deleteButton.bind(NSBindingName.enabled, to: self, withKeyPath: "canDeleteView", options: nil)
             
             loadViews()
+            
+            let metrics = [usersMetricsRadio, sessionsMetricsRadio, pageViewsMetricsRadio]
+            
+            var metric = UserDefaults.standard.string(forKey: "metric")
+            if metric == nil {
+                UserDefaults.standard.set("Sessions", forKey: "metric")
+                metric = "Sessions"
+            }
+            
+            metrics.forEach{
+                if $0?.title == metric {
+                    $0!.state = .on
+                }
+            }
         }
     }
     

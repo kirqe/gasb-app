@@ -41,7 +41,7 @@ class Requests {
 
     func getToken(email: String, password: String, completion: @escaping(Result<Token>) -> Void) {
         let httpBody = "{\"email\": \"\(email)\", \"password\": \"\(password)\"}"
-
+        
         dataRequest(with: "\(baseUrl!)/api/auth", httpMethod: "POST", httpBody: httpBody, objectType: Token.self) { (result: Result) in
             switch result {
             case .success(let object):
@@ -52,6 +52,8 @@ class Requests {
                     self.keychain.set(accessToken, forKey: "accessToken")
                     self.keychain.set(refreshToken, forKey: "refreshToken")
                 } else {
+                    self.keychain.delete("email")
+                    self.keychain.delete("password")
                     self.keychain.delete("accessToken")
                     self.keychain.delete("refreshToken")
                 }

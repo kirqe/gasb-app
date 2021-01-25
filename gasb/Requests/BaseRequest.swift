@@ -35,7 +35,7 @@ func dataRequest<T: Decodable>(with url: String, httpMethod: String, headers:Dic
     let session = URLSession.shared
 
     //now create the URLRequest object using the url object
-    var request = URLRequest(url: dataURL, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 60)
+    var request = URLRequest(url: dataURL, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 3)
     
     request.httpMethod = httpMethod
     

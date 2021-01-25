@@ -22,7 +22,6 @@ extension View {
     @NSManaged public var month: Bool
     @NSManaged public var name: String?
     @NSManaged public var now: Bool
-    @NSManaged public var service_email: String?
     @NSManaged public var week: Bool
 
 }

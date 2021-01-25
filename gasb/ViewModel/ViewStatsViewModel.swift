@@ -18,10 +18,7 @@ enum Kind: String, CaseIterable {
 
 class ViewStatsViewModel {
     var view: View?
-    
     var id: String
-    var service_email: String
-    
     
     var nowValue: Int? {
         didSet {
@@ -44,17 +41,19 @@ class ViewStatsViewModel {
         }
     }
     
+    var maxLength: Int = 10
+    
+    
     // show or hide certain fields
     var now: Bool?
     var day: Bool?
     var week: Bool?
     var month: Bool?
     
+    
     init(view: View, store: Store) {
         self.view = view
-        
         self.id = view.id ?? ""
-        self.service_email = view.service_email ?? ""
         
         self.now = view.now
         self.day = view.day
@@ -68,14 +67,20 @@ class ViewStatsViewModel {
     }
     
     private func valueDidUpdate(key: String, value: Int) {
+
+        
         print("call valueDidUpdate")
         NotificationCenter.default.post(name: NSNotification.Name("ViewStatsVMValuesUpdated"), object: nil, userInfo: [key: value])
     }
     
     func updateValue(kind: Kind, session: Session, store: Store, completion: @escaping() -> ()) {
         let term = kind.rawValue + ":" + self.id
-            
-        session.makeRequest(url: "http://localhost:9292/api/status/\(term)?e=\(self.service_email)") { object in
+        
+        var metric = UserDefaults.standard.string(forKey: "metric")
+        if metric == nil {
+            metric = "sessions"
+        }
+        session.makeRequest(url: "http://localhost:9292/api/status/\(term)/\(metric!)") { object in
             if let value = object.value, let term = object.term  {
                 print("key: \(term), value: \(value)")
                 store.set(key: term, value: value)

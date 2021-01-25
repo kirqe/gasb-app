@@ -6,10 +6,9 @@
         <attribute name="month" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="now" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="service_email" optional="YES" attributeType="String"/>
         <attribute name="week" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
     </entity>
     <elements>
-        <element name="View" positionX="-54" positionY="-9" width="128" height="148"/>
+        <element name="View" positionX="-54" positionY="-9" width="128" height="133"/>
     </elements>
 </model>

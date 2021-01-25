@@ -26,25 +26,33 @@ class AccessView: NSView, LoadableView{
         progressIndicator.startAnimation(self)
         Requests.shared.getToken(email: emailField.stringValue, password: passwordField.stringValue) { (result: Result) in
             switch result {
-            case .success(let token):
+            case .success(let tokenResponse):
+                
                 DispatchQueue.main.async {
-                    if self.keychain.get("accessToken") == nil {
-                        self.statusLabel.isHidden = false
-                        self.statusLabel.stringValue = "Invalid Email/Password or subscription is expired"
-                    } else {
-                        self.statusLabel.isHidden = true
-                    }
                     self.check_token()
+                    if let message = tokenResponse.message {
+                        self.statusLabel.stringValue = message
+                    }
+//                    if self.keychain.get("accessToken") == nil {
+////                        self.statusLabel.isHidden = false
+//
+//                    } else {
+////                        self.statusLabel.isHidden = true
+//                    }
+
                     self.progressIndicator.stopAnimation(self)
                 }
             case .failure(_):
-                self.check_token()
-                self.progressIndicator.stopAnimation(self)
+                 DispatchQueue.main.async {
+                    self.check_token()
+                    self.progressIndicator.stopAnimation(self)
+                }
             }
         }            
     }
     
     @IBAction func useNewCredentialsButtonClicked(_ sender: Any) {
+        self.statusLabel.stringValue = ""
         authorizedLayer.isHidden = true
         unauthorizedLayer.isHidden = false
     }
@@ -54,7 +62,7 @@ class AccessView: NSView, LoadableView{
         
         _ = load(fromNIBNamed: "AccessView")
         
-        statusLabel.isHidden = true
+//        statusLabel.isHidden = true
         check_token()
     }
     
@@ -63,14 +71,19 @@ class AccessView: NSView, LoadableView{
     }
     
     func check_token() {
-        if keychain.get("accessToken") == nil {
-            authorizedLayer.isHidden = true
-            unauthorizedLayer.isHidden = false
-        } else {
-            statusLabel.isHidden = true
-            authorizedLayer.isHidden = false
-            unauthorizedLayer.isHidden = true
-        }
+        print(keychain.get("accessToken"))
+            if keychain.get("accessToken") == nil {
+                NotificationCenter.default.post(name: NSNotification.Name("InvalidCredentialsEntered"), object: nil)
+                authorizedLayer.isHidden = true
+                unauthorizedLayer.isHidden = false
+            } else {
+                NotificationCenter.default.post(name: NSNotification.Name("ValidCredentialsEntered"), object: nil)
+//                statusLabel.isHidden = true
+                authorizedLayer.isHidden = false
+                unauthorizedLayer.isHidden = true
+            }
+
     }
 
 }
+

@@ -59,15 +59,25 @@ class Session {
                 }
             }
         } else {
+
+            
             self.queueRequest(sRequest: request)
             if !isFetchingToken {
                 self.fetchAccessToken()
             }
         }
+        
     }
 
     private func fetchAccessToken() { // login
         isFetchingToken = true
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+            print("stopped timer")
+            self.isFetchingToken = false
+        }
+
+        
         guard let email = keychain.get("email") else { return }
         guard let password = keychain.get("password") else { return }
 
@@ -112,5 +122,4 @@ class Session {
         }
         self.queuedRequests.removeAll()
     }
-
 }
