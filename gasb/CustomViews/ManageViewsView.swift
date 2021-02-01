@@ -37,6 +37,7 @@ class ManageViewsView: NSView, LoadableView{
     }
     
     @IBAction func doneButtonClicked(_ sender: NSButton) {
+        viewModel.arrayController.applyChanges()
         self.window?.close()
     }
     
@@ -49,7 +50,6 @@ class ManageViewsView: NSView, LoadableView{
         UserDefaults.standard.set(sender.title, forKey: "metric")
     }
     
-    
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
 
@@ -61,8 +61,6 @@ class ManageViewsView: NSView, LoadableView{
             viewsTableView.bind(NSBindingName.sortDescriptors, to: viewModel.arrayController, withKeyPath: "sortDescriptors", options: nil)
             addButton.bind(NSBindingName.enabled, to: self, withKeyPath: "canAddView", options: nil)
             deleteButton.bind(NSBindingName.enabled, to: self, withKeyPath: "canDeleteView", options: nil)
-            
-            loadViews()
             
             let metrics = [usersMetricsRadio, sessionsMetricsRadio, pageViewsMetricsRadio]
             
@@ -87,29 +85,20 @@ class ManageViewsView: NSView, LoadableView{
     }
 
     func updateCount() {
-        objCount = (viewModel.arrayController.arrangedObjects as AnyObject).count 
-            if objCount == 1 {
-                canAddView = true
-                canDeleteView = false
-            } else if objCount > 1 && objCount < 3 {
-                canAddView = true
-                canDeleteView = true
-            } else {
-                canAddView = false
-            }
-    
+        objCount = (viewModel.arrayController.arrangedObjects as AnyObject).count
+        
+        if objCount == 1 {
+            canAddView = true
+            canDeleteView = false
+        } else if objCount > 1 && objCount < 3 {
+            canAddView = true
+            canDeleteView = true
+        } else {
+            canAddView = false
+        }
     }
 
-    
     required init?(coder aDecoder: NSCoder) {
-//        self.managedObjectContext = (NSApp.delegate as! AppDelegate).persistentContainer.managedObjectModel
         super.init(coder: aDecoder)
     }
-    
-    fileprivate func loadViews() {
-        print("load table")
-    }
-
-    
-
 }

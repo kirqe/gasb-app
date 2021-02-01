@@ -9,10 +9,8 @@
 import Cocoa
 
 @NSApplicationMain
-class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
-    // vms
+class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {    
     var viewModel: ViewModel = ViewModel()
-    var session = Session()
 
     // menu
     var statusItem: NSStatusItem?
@@ -20,22 +18,27 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     
     // timers
     var refreshDataTimer: Timer? // main timer
-    var drawTimer: Timer?
     
     // views and windows
     lazy var manageViewWindow = NSWindow()
     lazy var accessViewWindow = NSWindow()
     
-
     var items: [View] = [] // view items from coreData
-    var statsViewModels: [ViewStatsViewModel] = []
+    var statsViewModels: [ViewStatsViewModel] = [] // for menu views
     var store: Store = Store() // ["now:12345": 10, "day:12345": 22]
     
     var paused = false
     var menuOpened = false
+    var iconOnly = false // show only icon in menubar
+    
+    var iconWidth: CGFloat = CGFloat(30)
+    var statusWidth: CGFloat = CGFloat(0)
+    var stack: NSStackView?
+
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // items = viewModel.arrayController.arrangedObjects as! [View]
+
         UserDefaults.standard.set(true, forKey: "NSConstraintBasedLayoutVisualizeMutuallyExclusiveConstraints")
         
         startMainTimer()
@@ -45,47 +48,93 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         menu.autoenablesItems = false
     
         configureStatusItem()
-
-        configureMenuItems()
+//        configureMenuItems()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(setItems), name: Notification.Name("ViewsRecordsUpdated"), object: nil )
+        NotificationCenter.default.addObserver(self, selector: #selector(setItems),
+                                               name: Notification.Name("ViewsRecordsUpdated"), object: nil )
         
-        NotificationCenter.default.addObserver(self, selector: #selector(pause), name: Notification.Name("InvalidCredentialsEntered"), object: nil )
+        NotificationCenter.default.addObserver(self, selector: #selector(pause),
+                                               name: Notification.Name("InvalidCredentialsEntered"), object: nil )
         
-        NotificationCenter.default.addObserver(self, selector: #selector(resume), name: Notification.Name("ValidCredentialsEntered"), object: nil )
-
+        NotificationCenter.default.addObserver(self, selector: #selector(resume),
+                                               name: Notification.Name("ValidCredentialsEntered"), object: nil )
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(updateStatusItemWidth),
+                                               name: Notification.Name("StatusItemWidthUpdated"), object: nil )
     }
-    
+
     @objc func setItems() {
         statsViewModels.removeAll()
+        
         items = viewModel.arrayController.arrangedObjects as! [View]
         for item in items {
-            let statsViewModel = ViewStatsViewModel(view: item, store: store) // pass existing data here?
-            statsViewModels.append(statsViewModel)
+            statsViewModels.append(ViewStatsViewModel(view: item, store: store))
         }
+        if !paused && !iconOnly {
+            configureStatusItem()
+        }
+        
     }
     
     
     // MARK: - Timers
     func startMainTimer() {
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.setItems() // take views from coreData
             self.updateDataForViews() // fetch new data on initial launch
         }
-        
-        drawTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateStatusData), userInfo: nil, repeats: true)
-        drawTimer?.fire()
-        
-        refreshDataTimer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(updateDataForViews), userInfo: nil, repeats: true)
+
+        refreshDataTimer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(updateDataForViews), userInfo: nil, repeats: true)
         refreshDataTimer?.fire()
         
         RunLoop.current.add(refreshDataTimer!, forMode: .common)
     }
-        
+    
+    @objc func updateStatusItemWidth() {
+        if paused || iconOnly {
+            statusItem?.button?.constraints.forEach {$0.isActive = false}
+            statusItem?.length = iconWidth
+        } else {
+            statusItem?.button?.constraints.forEach {$0.isActive = true}
+            statusWidth = statusItem?.length ?? iconWidth
+            
+            let newWidth: CGFloat = statusItem?.button?.subviews.reduce(iconWidth, { x, y in
+                x + y.frame.width
+            }) ?? iconWidth
+            
+            
+            if newWidth > statusItem!.length {
+                statusItem?.length += (newWidth - statusItem!.length)
+            } else {
+                statusItem?.length = newWidth
+            }
+        }
+       
+    }
+    
     // MARK: - Configure Status Item
-    func configureStatusItem() {
-        updateStatusData()
+    @objc func configureStatusItem() {
         // Status Bar
+        var views: [StatusItemSectionView] = []
+        
+        for item in statsViewModels {
+            
+            if item.isValid {
+                let section = StatusItemSectionView(
+                    frame: NSRect(),
+                    viewModel: item,
+                    statusItem: statusItem!,
+                    menu: menu
+                )
+                
+                views.append(section)
+                
+            }
+            
+        }
+
+        
         let statusBar = NSStatusBar.system
         statusItem = statusBar.statusItem(withLength: NSStatusItem.variableLength)
         statusItem?.button?.action = #selector(self.statusBarButtonClicked(sender:))
@@ -95,70 +144,49 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         itemImage?.isTemplate = true
         statusItem?.button?.image = itemImage
         statusItem?.button?.imagePosition = NSControl.ImagePosition.imageLeft
+        
+
+        stack = NSStackView(views: views)
+        stack?.translatesAutoresizingMaskIntoConstraints = false
+        
+        statusItem?.button?.addSubview(stack!)
+
+        statusItem?.button?.addConstraint(NSLayoutConstraint(item: stack!, attribute: .leading, relatedBy: .equal, toItem: statusItem?.button, attribute: .leading, multiplier: 1, constant: 30))
+        
+        statusItem?.button?.addConstraint(NSLayoutConstraint(item: stack!, attribute: .trailing, relatedBy: .equal, toItem: statusItem?.button, attribute: .trailing, multiplier: 1, constant: -5))
     }
     
-    @objc func updateStatusData() {
-        // Status Bar Data
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.minimumLineHeight = 7
-        paragraphStyle.maximumLineHeight = 7
-        paragraphStyle.alignment = .right
-
-        let textAttr = [
-            NSAttributedString.Key.font: NSFont.systemFont(ofSize: 9, weight: NSFont.Weight.ultraLight)
-        ]
-
-        var top: [String] = []
-        var bot: [String] = []
-        
-        for item in statsViewModels {
-    
-            if item.now! || item.day! {
-                var now = item.now! ? "\(item.nowValue ?? 0)" : "\u{2010}" //"\(Int.random(in: 1..<1000))" //
-                var day = item.day! ? "\(item.dayValue ?? 0)" : "\u{2010}"
-                var spacing = now.count > day.count ? now.count : day.count
-                                                
-                while spacing > now.count {
-                    now = "\u{00A0}\u{00A0}\u{00A0}\u{00A0}" + now
-                    spacing -= 1
-                }
-                
-                while spacing > day.count {
-                    day = "\u{00A0}\u{00A0}\u{00A0}\u{00A0}" + day
-                    spacing -= 1
-                }
-       
-                top.append(now)
-                bot.append(day)
-            }
-        }
-        
-        //                                                                 - • -
-        let row1 = NSAttributedString(string: "\n" + top.joined(separator: "\u{00A0}\u{2022}\u{00A0}"), attributes: textAttr)
-        let row2 = NSAttributedString(string: "\n" + bot.joined(separator: "\u{00A0}\u{2022}\u{00A0}"), attributes: textAttr)
-        
-        var rows = NSMutableAttributedString(attributedString: NSAttributedString(string: ""))
-        rows.append(row1)
-        rows.append(row2)
-        
-        rows.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range:NSMakeRange(0, rows.length))
-        rows.addAttribute(NSAttributedString.Key.baselineOffset, value: 3.7, range:NSMakeRange(0, rows.length))
-        
-        statusItem?.button?.attributedTitle = rows
-        rows = NSMutableAttributedString(attributedString: NSAttributedString(string: ""))
-    }
     
     // MARK: - Configure Menu Items
     func configureMenuItems() {
+        // draw ViewStatsViews
+        
+        for item in statsViewModels { // statsViewModels
+            if item.isValid {
+                let menuItem = NSMenuItem()
+                let viewStatsView = ViewStatsView(
+                    frame: NSRect(x: 0.0, y: 0.0, width: 220.0, height: 130),
+                    viewModel: item
+                )
+                menuItem.view = viewStatsView
+                menu?.addItem(menuItem)
+                menu?.addItem(NSMenuItem.separator())
+            }
+        }
+        
+        // draw generic elements
         menu?.addItem(NSMenuItem.separator())
         menu?.addItem(withTitle: "Manage Views", action: #selector(openManageViewsView), keyEquivalent: "")
         
-        let pauseBtn = NSMenuItem(title: "Pause", action: #selector(togglePause), keyEquivalent: "")
-        if paused {
-            pauseBtn.title = "Resume"
-        }
-            
+        let pauseStatus = paused ? "Resume" : "Pause"
+        let pauseBtn = NSMenuItem(title: pauseStatus, action: #selector(togglePause), keyEquivalent: "")
         menu?.addItem(pauseBtn)
+        
+        let displayMode = iconOnly ? "Show menu stats" : "Hide menu stats"
+        let toggleMenuStatusBtn = NSMenuItem(title: displayMode, action: #selector(toggleDisplayMode), keyEquivalent: "")
+        toggleMenuStatusBtn.isEnabled = !paused
+        menu?.addItem(toggleMenuStatusBtn)
+        
         menu?.addItem(NSMenuItem.separator())
         menu?.addItem(withTitle: "Authenticate", action: #selector(openAccessView), keyEquivalent: "")
         menu?.addItem(NSMenuItem.separator())
@@ -166,43 +194,22 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         menu?.addItem(withTitle: "Quit gasb", action: #selector(quitApp), keyEquivalent: "")
     }
     
-    
-    func updateMenuItems() { // redraw
-        for statsViewModel in statsViewModels { // statsViewModels
-            let menuItem = NSMenuItem()
-            let vsv = ViewStatsView(
-                frame: NSRect(x: 0.0, y: 0.0, width: 200.0, height: 130),
-                viewModel: statsViewModel
-            )
-            
-            menuItem.view = vsv
-            menu?.addItem(menuItem)
-            menu?.addItem(NSMenuItem.separator())
-        }
-        
-        configureMenuItems()
-    }
-    
     @objc func updateDataForViews() {
-        updateStatusData()
         print("updateDataForViews")
         if !paused {
             let group = DispatchGroup()
-            for statsViewModel in statsViewModels {
-                if (!statsViewModel.id.isEmpty) &&
-                    (statsViewModel.now! || statsViewModel.day! || statsViewModel.week! || statsViewModel.month!) {
-                    
+            
+            for item in statsViewModels {
+                if item.isValid {
                     for kind in Kind.allCases {
                         group.enter()
-                        statsViewModel.updateValue(kind: kind, session: session, store: store) { group.leave() }
-
+                        item.updateValue(kind: kind, store: store) { group.leave() }
                     }
                 }
-                
             }
         }
     }
-    
+
 
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
@@ -211,30 +218,42 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     override func awakeFromNib() {
         super.awakeFromNib()
     }
-
+    
     @objc func statusBarButtonClicked(sender: NSStatusBarButton) {
         menuOpened = true
+        // toggleInvertColors(on: true)
+
         if let menu = menu {
             menu.removeAllItems()
             statusItem?.menu = menu // add menu to button...
-            
-            updateMenuItems()
-            statusItem?.button?.performClick(nil) // ...and click
+            configureMenuItems()
+//            statusItem?.button?.performClick(nil) // ...and click
         }
     }
 
     @objc func menuDidClose(_ menu: NSMenu) {
         menuOpened = false
+        toggleInvertColors(on: false)
         statusItem?.menu = nil // remove menu so button works as before
     }
 
     
+     @objc func toggleInvertColors(on: Bool) {
+        if let stackViews = stack?.views {
+            for view in stackViews {
+               if let sISV = (view as? StatusItemSectionView) {
+                   sISV.clicked = on
+                   sISV.darkMenuBar = sISV.isDarkMode()
+                   view.needsDisplay = true
+               }
+            }
+        }
+    }
+ 
     // MARK: - Handling clicking on menuItems
-
-
     @objc func openManageViewsView() {
         let vc = ViewController()
-        vc.view = NSView(frame: NSRect(x: 0.0, y: 0.0, width: 590, height: 210))
+        vc.view = NSView(frame: NSRect(x: 0.0, y: 0.0, width: 550, height: 210))
         
         if NSApp.windows.contains(manageViewWindow) {
             manageViewWindow.makeKeyAndOrderFront(self)
@@ -242,41 +261,54 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             manageViewWindow = NSWindow(contentViewController: vc)
             let manageViewsView = ManageViewsView()
             manageViewsView.add(toView: vc.view)
-            
             manageViewWindow.title = "Manage Views"
             manageViewWindow.makeKeyAndOrderFront(self)
         }
     }
     
-    
     @objc func pause() {
         refreshDataTimer?.invalidate()
         paused = true
     }
+    
     @objc func resume() {
-        statusItem?.button?.attributedTitle = NSAttributedString(string: "paused", attributes: [NSAttributedString.Key.font: NSFont.systemFont(ofSize: 11, weight: NSFont.Weight.ultraLight)])
-        
         refreshDataTimer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(updateDataForViews), userInfo: nil, repeats: true)
-         refreshDataTimer?.fire()
-        
+        refreshDataTimer?.fire()
         RunLoop.current.add(refreshDataTimer!, forMode: .common)
         
         paused = false
+        if !iconOnly {
+            configureStatusItem()
+        }
+            
+        updateStatusItemWidth()
     }
     
     @objc func togglePause() {
-        if paused {
-            resume()
-        } else {
-            pause()
-        }
+        paused ? resume() : pause()
+        updateStatusItemWidth()
+    }
+    
+    @objc func toggleDisplayMode() {
+        iconOnly ? statusNormal() : statusIconOnly()
+    }
+    
+    func statusIconOnly() {
+        iconOnly = true
+       
+        updateStatusItemWidth()
+    }
+    
+    func statusNormal() {
+        iconOnly = false
+        configureStatusItem()
+        updateStatusItemWidth()
     }
     
     @objc func openAccessView() {
         let vc = ViewController()
         vc.view = NSView(frame: NSRect(x: 0.0, y: 0.0, width: 330, height: 178))
 
-        
         if NSApp.windows.contains(accessViewWindow) {
             accessViewWindow.makeKeyAndOrderFront(self)
         } else {
@@ -287,7 +319,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             accessViewWindow.title = "Login"
             accessViewWindow.makeKeyAndOrderFront(self)
         }
-        
     }
     
     @objc func openAbout() {
@@ -297,5 +328,22 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     @objc func quitApp() {
         NSApp.terminate(self)
     }
-    
+}
+
+extension NSStatusBarButton {
+    open override func mouseDown(with event: NSEvent) {
+        if let stackViews = subviews.first?.subviews {
+            for view in stackViews {
+               if let sISV = (view as? StatusItemSectionView) {
+                   sISV.clicked = true
+                   sISV.darkMenuBar = sISV.isDarkMode()
+                   view.needsDisplay = true
+               }
+
+            }
+        }
+        
+        performClick(nil)
+        super.mouseDown(with: event)
+    }
 }

@@ -25,7 +25,7 @@
                     <rect key="frame" x="8" y="9" width="197" height="89"/>
                     <subviews>
                         <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R9G-sM-es1">
-                            <rect key="frame" x="0.0" y="72" width="55" height="17"/>
+                            <rect key="frame" x="0.0" y="72" width="58" height="17"/>
                             <subviews>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="VYy-KD-XXI">
                                     <rect key="frame" x="-2" y="1" width="44" height="16"/>
@@ -39,8 +39,9 @@
                                     </textFieldCell>
                                 </textField>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="MNQ-Wa-p8X">
-                                    <rect key="frame" x="46" y="0.0" width="11" height="17"/>
-                                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="-" id="Asq-rB-xs1">
+                                    <rect key="frame" x="46" y="0.0" width="14" height="17"/>
+                                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="0" id="Asq-rB-xs1">
+                                        <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="0KO-B7-w6W"/>
                                         <font key="font" metaFont="systemBold" size="14"/>
                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -57,7 +58,7 @@
                             </customSpacing>
                         </stackView>
                         <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f8G-0f-pQl">
-                            <rect key="frame" x="0.0" y="48" width="55" height="17"/>
+                            <rect key="frame" x="0.0" y="48" width="58" height="17"/>
                             <subviews>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0Ne-MK-xyD">
                                     <rect key="frame" x="-2" y="1" width="44" height="16"/>
@@ -71,8 +72,9 @@
                                     </textFieldCell>
                                 </textField>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5Zb-A3-yuD">
-                                    <rect key="frame" x="46" y="0.0" width="11" height="17"/>
-                                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="-" id="3Ly-Kr-5vj">
+                                    <rect key="frame" x="46" y="0.0" width="14" height="17"/>
+                                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="0" id="3Ly-Kr-5vj">
+                                        <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="TxB-bv-hHh"/>
                                         <font key="font" metaFont="systemBold" size="14"/>
                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -92,7 +94,7 @@
                             </customSpacing>
                         </stackView>
                         <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6vc-nu-oX5">
-                            <rect key="frame" x="0.0" y="24" width="55" height="17"/>
+                            <rect key="frame" x="0.0" y="24" width="58" height="17"/>
                             <subviews>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="i0g-Dk-Owj">
                                     <rect key="frame" x="-2" y="1" width="44" height="16"/>
@@ -106,8 +108,9 @@
                                     </textFieldCell>
                                 </textField>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nYo-uN-8YP">
-                                    <rect key="frame" x="46" y="0.0" width="11" height="17"/>
-                                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="-" id="ORY-nL-xbC">
+                                    <rect key="frame" x="46" y="0.0" width="14" height="17"/>
+                                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="0" id="ORY-nL-xbC">
+                                        <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="HDJ-dZ-0eB"/>
                                         <font key="font" metaFont="systemBold" size="14"/>
                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -127,7 +130,7 @@
                             </customSpacing>
                         </stackView>
                         <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jx0-Zo-5br">
-                            <rect key="frame" x="0.0" y="0.0" width="55" height="17"/>
+                            <rect key="frame" x="0.0" y="0.0" width="58" height="17"/>
                             <subviews>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OWO-gN-hQ0">
                                     <rect key="frame" x="-2" y="1" width="44" height="16"/>
@@ -141,8 +144,9 @@
                                     </textFieldCell>
                                 </textField>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ly3-qD-jeG">
-                                    <rect key="frame" x="46" y="0.0" width="11" height="17"/>
-                                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="-" id="Yao-hV-W2R">
+                                    <rect key="frame" x="46" y="0.0" width="14" height="17"/>
+                                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="0" id="Yao-hV-W2R">
+                                        <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="HNN-Pu-FxN"/>
                                         <font key="font" metaFont="systemBold" size="14"/>
                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>

@@ -11,7 +11,8 @@
 		0709AAFF25A60D000042D347 /* BaseRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0709AAFE25A60D000042D347 /* BaseRequest.swift */; };
 		0711532B256D3B84004BA215 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0711532A256D3B83004BA215 /* ViewController.swift */; };
 		07115332256D6051004BA215 /* StatusResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07115331256D6051004BA215 /* StatusResponse.swift */; };
-		0711E318259779950099F54A /* BoxLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0711E317259779950099F54A /* BoxLayer.swift */; };
+		0716326B25BFB5530043A65A /* StatusItemSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0716326A25BFB5530043A65A /* StatusItemSectionView.swift */; };
+		0716326D25BFB5650043A65A /* StatusItemSectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0716326C25BFB5650043A65A /* StatusItemSectionView.xib */; };
 		0717838B256FEDAB00BB6FB2 /* TableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0717838A256FEDAB00BB6FB2 /* TableTextField.swift */; };
 		0717838D25700FB900BB6FB2 /* TableCheckbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0717838C25700FB900BB6FB2 /* TableCheckbox.swift */; };
 		071A84BC258638D500E60E01 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 071A84BB258638D500E60E01 /* CoreDataManager.swift */; };
@@ -35,7 +36,7 @@
 		07A20BB2256984710009EAC2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A20BB1256984710009EAC2 /* AppDelegate.swift */; };
 		07A20BB4256984730009EAC2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07A20BB3256984730009EAC2 /* Assets.xcassets */; };
 		07A20BB7256984730009EAC2 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07A20BB5256984730009EAC2 /* MainMenu.xib */; };
-		07C97FDC25A6920600220DEE /* Requests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C97FDB25A6920600220DEE /* Requests.swift */; };
+		07BB72D925C23546009998CC /* StatusItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07BB72D825C23546009998CC /* StatusItem.swift */; };
 		07DE3F2B259F68F500BBD615 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 07DE3F2A259F68F500BBD615 /* KeychainSwift */; };
 		07F1F8C125B1E7210017C542 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F1F8C025B1E7200017C542 /* CustomTextField.swift */; };
 		07FDD7B525AC892400829469 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07FDD7B425AC892400829469 /* Store.swift */; };
@@ -46,7 +47,8 @@
 		0709AAFE25A60D000042D347 /* BaseRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseRequest.swift; sourceTree = "<group>"; };
 		0711532A256D3B83004BA215 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		07115331256D6051004BA215 /* StatusResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusResponse.swift; sourceTree = "<group>"; };
-		0711E317259779950099F54A /* BoxLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoxLayer.swift; sourceTree = "<group>"; };
+		0716326A25BFB5530043A65A /* StatusItemSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusItemSectionView.swift; sourceTree = "<group>"; };
+		0716326C25BFB5650043A65A /* StatusItemSectionView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StatusItemSectionView.xib; sourceTree = "<group>"; };
 		0717838A256FEDAB00BB6FB2 /* TableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableTextField.swift; sourceTree = "<group>"; };
 		0717838C25700FB900BB6FB2 /* TableCheckbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableCheckbox.swift; sourceTree = "<group>"; };
 		071A84BB258638D500E60E01 /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
@@ -73,7 +75,7 @@
 		07A20BB6256984730009EAC2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		07A20BB8256984730009EAC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		07A20BB9256984730009EAC2 /* gasb.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = gasb.entitlements; sourceTree = "<group>"; };
-		07C97FDB25A6920600220DEE /* Requests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Requests.swift; sourceTree = "<group>"; };
+		07BB72D825C23546009998CC /* StatusItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusItem.swift; sourceTree = "<group>"; };
 		07F1F8C025B1E7200017C542 /* CustomTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		07FDD7B425AC892400829469 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -124,7 +126,7 @@
 				07F1F8C025B1E7200017C542 /* CustomTextField.swift */,
 				0717838A256FEDAB00BB6FB2 /* TableTextField.swift */,
 				0717838C25700FB900BB6FB2 /* TableCheckbox.swift */,
-				0711E317259779950099F54A /* BoxLayer.swift */,
+				07BB72D825C23546009998CC /* StatusItem.swift */,
 			);
 			path = Controlls;
 			sourceTree = "<group>";
@@ -134,7 +136,6 @@
 			children = (
 				072D5A5B25A8CFB3000688B1 /* Session.swift */,
 				0709AAFE25A60D000042D347 /* BaseRequest.swift */,
-				07C97FDB25A6920600220DEE /* Requests.swift */,
 			);
 			path = Requests;
 			sourceTree = "<group>";
@@ -148,6 +149,8 @@
 				07462A6E256C087F00979375 /* ManageViewsView.xib */,
 				07496B4F259216A9001A3A7C /* AccessView.swift */,
 				07496B4D259214FF001A3A7C /* AccessView.xib */,
+				0716326A25BFB5530043A65A /* StatusItemSectionView.swift */,
+				0716326C25BFB5650043A65A /* StatusItemSectionView.xib */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -270,6 +273,7 @@
 				07A20BB4256984730009EAC2 /* Assets.xcassets in Resources */,
 				07496B4E259214FF001A3A7C /* AccessView.xib in Resources */,
 				07462A78256C7A8000979375 /* ViewStatsView.xib in Resources */,
+				0716326D25BFB5650043A65A /* StatusItemSectionView.xib in Resources */,
 				07A20BB7256984730009EAC2 /* MainMenu.xib in Resources */,
 				07462A6F256C087F00979375 /* ManageViewsView.xib in Resources */,
 			);
@@ -284,10 +288,12 @@
 			files = (
 				07496B50259216A9001A3A7C /* AccessView.swift in Sources */,
 				072D5A5C25A8CFB3000688B1 /* Session.swift in Sources */,
+				07BB72D925C23546009998CC /* StatusItem.swift in Sources */,
 				0711532B256D3B84004BA215 /* ViewController.swift in Sources */,
 				072D5A5A25A8CBB9000688B1 /* TokenError.swift in Sources */,
 				075245DC256EA2D2008F9F0A /* View+CoreDataProperties.swift in Sources */,
 				07FDD7B525AC892400829469 /* Store.swift in Sources */,
+				0716326B25BFB5530043A65A /* StatusItemSectionView.swift in Sources */,
 				07235A93256E594600449CE8 /* ViewModel.swift in Sources */,
 				0709AAFF25A60D000042D347 /* BaseRequest.swift in Sources */,
 				07462A69256BFF8400979375 /* ManageViewsView.swift in Sources */,
@@ -300,13 +306,11 @@
 				0709AAFD25A60C200042D347 /* Token.swift in Sources */,
 				075245DB256EA2D2008F9F0A /* View+CoreDataClass.swift in Sources */,
 				0717838D25700FB900BB6FB2 /* TableCheckbox.swift in Sources */,
-				0711E318259779950099F54A /* BoxLayer.swift in Sources */,
 				07462A76256C7A6B00979375 /* ViewStatsView.swift in Sources */,
 				0778479925955F7C0032F3C8 /* AccessViewModel.swift in Sources */,
 				0753849B2571575200B62EF7 /* ViewStatsViewModel.swift in Sources */,
 				071A84BC258638D500E60E01 /* CoreDataManager.swift in Sources */,
 				07A20BB2256984710009EAC2 /* AppDelegate.swift in Sources */,
-				07C97FDC25A6920600220DEE /* Requests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -451,6 +455,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				PRODUCT_BUNDLE_IDENTIFIER = kirqe.be.gasb;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -471,6 +476,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				PRODUCT_BUNDLE_IDENTIFIER = kirqe.be.gasb;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

@@ -18,13 +18,13 @@ class AccessView: NSView, LoadableView{
     @IBOutlet weak var passwordField: NSSecureTextField!
     @IBOutlet weak var statusLabel: NSTextField!
     
-    @IBOutlet weak var authorizedLayer: BoxLayer!
+    @IBOutlet weak var authorizedLayer: NSBox!
     @IBOutlet weak var unauthorizedLayer: NSStackView!
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
     
     @IBAction func loginButtonClicked(_ sender: Any) {
         progressIndicator.startAnimation(self)
-        Requests.shared.getToken(email: emailField.stringValue, password: passwordField.stringValue) { (result: Result) in
+        Session.shared.getToken(email: emailField.stringValue, password: passwordField.stringValue) { (result: Result) in
             switch result {
             case .success(let tokenResponse):
                 
@@ -33,12 +33,6 @@ class AccessView: NSView, LoadableView{
                     if let message = tokenResponse.message {
                         self.statusLabel.stringValue = message
                     }
-//                    if self.keychain.get("accessToken") == nil {
-////                        self.statusLabel.isHidden = false
-//
-//                    } else {
-////                        self.statusLabel.isHidden = true
-//                    }
 
                     self.progressIndicator.stopAnimation(self)
                 }
@@ -62,7 +56,6 @@ class AccessView: NSView, LoadableView{
         
         _ = load(fromNIBNamed: "AccessView")
         
-//        statusLabel.isHidden = true
         check_token()
     }
     
@@ -71,7 +64,6 @@ class AccessView: NSView, LoadableView{
     }
     
     func check_token() {
-        print(keychain.get("accessToken"))
             if keychain.get("accessToken") == nil {
                 NotificationCenter.default.post(name: NSNotification.Name("InvalidCredentialsEntered"), object: nil)
                 authorizedLayer.isHidden = true

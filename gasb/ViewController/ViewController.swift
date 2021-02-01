@@ -35,7 +35,6 @@ class ViewController: NSViewController {
         view.window?.styleMask.remove(.resizable)
         view.window?.styleMask.remove(.miniaturizable)
         view.window?.center()
-        
     }
     
 }

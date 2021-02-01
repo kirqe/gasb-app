@@ -22,11 +22,13 @@ class TableTextField: NSTextField {
         
         do {
             try managedObjectContext.save()
-            NotificationCenter.default.post(name: Notification.Name("ViewsRecordsUpdated"), object: nil, userInfo: nil)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                NotificationCenter.default.post(name: Notification.Name("ViewsRecordsUpdated"), object: nil)
+            }
         } catch let error {
             print(error)
         }
+        
     }
-    
-    
 }

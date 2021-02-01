@@ -30,4 +30,13 @@ class ViewArrayController:  NSArrayController {
             print("error removing object #ViewArrayController")
         }
     }
+    
+    func applyChanges() {
+        do {
+            try managedObjectContext?.save()
+            NotificationCenter.default.post(name: Notification.Name("ViewsRecordsUpdated"), object: nil, userInfo: nil)
+        } catch {
+            print("error removing object #ViewArrayController")
+        }
+    }
 }

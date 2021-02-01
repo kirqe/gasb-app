@@ -10,8 +10,11 @@ import Foundation
 import KeychainSwift
 
 class Session {
+    static var shared = Session()
+    var keys: NSDictionary?
+    var baseUrl: String?
     let keychain = KeychainSwift()
-    
+ 
     struct SRequest {
         var url: URL
         var completion: (StatusResponse) -> Void
@@ -23,6 +26,13 @@ class Session {
     private var isFetchingToken: Bool = false
 
     init() {
+        if let path = Bundle.main.path(forResource: "App", ofType: "plist") {
+            keys = NSDictionary(contentsOfFile: path)
+        }
+        if let dict = keys {
+            baseUrl = dict["BASE_URL"] as? String
+        }
+        
         fetchAccessToken()
     }
 
@@ -59,8 +69,6 @@ class Session {
                 }
             }
         } else {
-
-            
             self.queueRequest(sRequest: request)
             if !isFetchingToken {
                 self.fetchAccessToken()
@@ -72,16 +80,16 @@ class Session {
     private func fetchAccessToken() { // login
         isFetchingToken = true
 
+        // 
         DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
             print("stopped timer")
             self.isFetchingToken = false
         }
 
-        
         guard let email = keychain.get("email") else { return }
         guard let password = keychain.get("password") else { return }
 
-        Requests.shared.getToken(email: email, password: password) { (result: Result) in
+        getToken(email: email, password: password) { (result: Result) in
             switch result {
             case .success(let token):
                 self.token = token
@@ -96,7 +104,7 @@ class Session {
 
     private func refreshToken(using refreshToken: String) {
         isFetchingToken = true
-        Requests.shared.getToken(refreshToken: refreshToken) { (result: Result) in
+        getToken(refreshToken: refreshToken) { (result: Result) in
             switch result {
             case .success(let token):
                 self.token = token
@@ -122,4 +130,60 @@ class Session {
         }
         self.queuedRequests.removeAll()
     }
+    
+    // messed up
+    func getStatus(of term: String, completion: @escaping(StatusResponse) -> Void) {
+        makeRequest(url: "\(baseUrl!)/api/status/\(term)") { result in
+            completion(result)
+        }
+    }
+    
+    
+    func getToken(email: String, password: String, completion: @escaping(Result<Token>) -> Void) {
+        let httpBody = "{\"email\": \"\(email)\", \"password\": \"\(password)\"}"
+        
+        dataRequest(with: "\(baseUrl!)/api/auth", httpMethod: "POST", httpBody: httpBody, objectType: Token.self) { (result: Result) in
+            switch result {
+            case .success(let object):
+
+                if let accessToken = object.accessToken, let refreshToken = object.refreshToken {
+                    self.keychain.set(email, forKey: "email")
+                    self.keychain.set(password, forKey: "password")
+                    self.keychain.set(accessToken, forKey: "accessToken")
+                    self.keychain.set(refreshToken, forKey: "refreshToken")
+                } else {
+                    self.keychain.delete("email")
+                    self.keychain.delete("password")
+                    self.keychain.delete("accessToken")
+                    self.keychain.delete("refreshToken")
+                }
+                completion(Result.success(object))
+            case .failure(let error):
+                completion(Result.failure(error))
+            }
+        }
+    }
+
+    func getToken(refreshToken: String, completion: @escaping(Result<Token>) -> Void) {
+        let httpBody = "{\"rt\": \"\(refreshToken)\"}"
+        
+        dataRequest(with: "\(baseUrl!)/api/auth", httpMethod: "POST", httpBody: httpBody, objectType: Token.self) { (result: Result) in
+            switch result {
+            case .success(let object):
+
+                if let accessToken = object.accessToken, let refreshToken = object.refreshToken {
+                    self.keychain.set(accessToken, forKey: "accessToken")
+                    self.keychain.set(refreshToken, forKey: "refreshToken")
+                    
+                } else {
+                    self.keychain.delete("accessToken")
+                    self.keychain.delete("refreshToken")
+                }
+                completion(Result.success(object))
+            case .failure(let error):
+                completion(Result.failure(error))
+            }
+        }
+    }
+
 }
