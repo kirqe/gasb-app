@@ -67,9 +67,6 @@ class ViewStatsView: NSView, LoadableView {
 //    }
     
     @objc func reloadLabels() {
-        print("reload")
-        
-        
         if let vsVM = self.viewModel {
             DispatchQueue.main.async {
                 // NOW

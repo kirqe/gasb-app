@@ -73,7 +73,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         if !paused && !iconOnly {
             configureStatusItem()
         }
-        
     }
     
     
@@ -188,14 +187,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         menu?.addItem(toggleMenuStatusBtn)
         
         menu?.addItem(NSMenuItem.separator())
-        menu?.addItem(withTitle: "Authenticate", action: #selector(openAccessView), keyEquivalent: "")
+        menu?.addItem(withTitle: "Auth", action: #selector(openAccessView), keyEquivalent: "")
         menu?.addItem(NSMenuItem.separator())
         menu?.addItem(withTitle: "About gasb", action: #selector(openAbout), keyEquivalent: "")
         menu?.addItem(withTitle: "Quit gasb", action: #selector(quitApp), keyEquivalent: "")
     }
     
     @objc func updateDataForViews() {
-        print("updateDataForViews")
         if !paused {
             let group = DispatchGroup()
             
@@ -209,7 +207,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             }
         }
     }
-
 
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
@@ -260,6 +257,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         } else {
             manageViewWindow = NSWindow(contentViewController: vc)
             let manageViewsView = ManageViewsView()
+            
             manageViewsView.add(toView: vc.view)
             manageViewWindow.title = "Manage Views"
             manageViewWindow.makeKeyAndOrderFront(self)
@@ -295,28 +293,30 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     
     func statusIconOnly() {
         iconOnly = true
-       
         updateStatusItemWidth()
     }
     
     func statusNormal() {
         iconOnly = false
-        configureStatusItem()
         updateStatusItemWidth()
+        configureStatusItem()
     }
     
     @objc func openAccessView() {
-        let vc = ViewController()
-        vc.view = NSView(frame: NSRect(x: 0.0, y: 0.0, width: 330, height: 178))
-
+        let accessVM = AccessViewModel()
+        
         if NSApp.windows.contains(accessViewWindow) {
             accessViewWindow.makeKeyAndOrderFront(self)
         } else {
+            let vc = ViewController()
+            vc.view = NSView(frame: NSRect(x: 0.0, y: 0.0, width: 330, height: 178))
             accessViewWindow = NSWindow(contentViewController: vc)
-            let accessView = AccessView()
+            
+            let accessView = AccessView(viewModel: accessVM)
+            
             accessView.add(toView: vc.view)
             
-            accessViewWindow.title = "Login"
+            accessViewWindow.title = "Auth"
             accessViewWindow.makeKeyAndOrderFront(self)
         }
     }

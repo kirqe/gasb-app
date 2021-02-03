@@ -79,10 +79,8 @@ class Session {
 
     private func fetchAccessToken() { // login
         isFetchingToken = true
-
-        // 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-            print("stopped timer")
+ 
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
             self.isFetchingToken = false
         }
 
@@ -133,7 +131,7 @@ class Session {
     
     // messed up
     func getStatus(of term: String, completion: @escaping(StatusResponse) -> Void) {
-        makeRequest(url: "\(baseUrl!)/api/status/\(term)") { result in
+        makeRequest(url: "\(baseUrl!)/status/\(term)") { result in
             completion(result)
         }
     }
@@ -142,7 +140,7 @@ class Session {
     func getToken(email: String, password: String, completion: @escaping(Result<Token>) -> Void) {
         let httpBody = "{\"email\": \"\(email)\", \"password\": \"\(password)\"}"
         
-        dataRequest(with: "\(baseUrl!)/api/auth", httpMethod: "POST", httpBody: httpBody, objectType: Token.self) { (result: Result) in
+        dataRequest(with: "\(baseUrl!)/auth", httpMethod: "POST", httpBody: httpBody, objectType: Token.self) { (result: Result) in
             switch result {
             case .success(let object):
 
@@ -167,7 +165,7 @@ class Session {
     func getToken(refreshToken: String, completion: @escaping(Result<Token>) -> Void) {
         let httpBody = "{\"rt\": \"\(refreshToken)\"}"
         
-        dataRequest(with: "\(baseUrl!)/api/auth", httpMethod: "POST", httpBody: httpBody, objectType: Token.self) { (result: Result) in
+        dataRequest(with: "\(baseUrl!)/auth", httpMethod: "POST", httpBody: httpBody, objectType: Token.self) { (result: Result) in
             switch result {
             case .success(let object):
 
