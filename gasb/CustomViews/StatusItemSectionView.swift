@@ -24,34 +24,20 @@ class StatusItemSectionView: NSView, LoadableView {
     var clicked: Bool = false
     var darkMenuBar: Bool = false
   
-    
     init(frame frameRect: NSRect, viewModel: ViewStatsViewModel, statusItem: NSStatusItem, menu: NSMenu) {
-//        self.statusItem = statusItem
         super.init(frame: frameRect)
         
         self.viewModel = viewModel
         self.viewItem = viewModel.view
-        guard let viewItem = self.viewItem else { return }
         darkMenuBar = isDarkMode()
-        
-        
-//        menu.delegate = self
 
         NotificationCenter.default.addObserver(self, selector: #selector(reloadLabels), name: Notification.Name("ViewStatsVMValuesUpdated"), object: nil )
-
         
         _ = load(fromNIBNamed: "StatusItemSectionView")
-
 
        reloadLabels()
         
         DistributedNotificationCenter.default().addObserver(self, selector: #selector(change), name:NSNotification.Name(rawValue: "AppleInterfaceThemeChangedNotification"), object: nil)
-        
-//        let drawTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(upd), userInfo: nil, repeats: true)
-//        
-//        drawTimer.fire()
-//        
-//        RunLoop.current.add(drawTimer, forMode: .common)
     }
     
     func isDarkMode() -> Bool {
@@ -80,14 +66,6 @@ class StatusItemSectionView: NSView, LoadableView {
             self.botValue?.stringValue = "\(self.viewModel?.dayValue ?? 0)"
         }
     }
-    
-    // del this
-    @objc func upd() {
-        value = Int.random(in: 10..<199)
-        reloadLabels()
-        NotificationCenter.default.post(name: NSNotification.Name("StatusItemWidthUpdated"), object: nil)
-    }
-    
     
     override func draw(_ dirtyRect: NSRect) {
         statusItem?.drawStatusBarBackground(in: dirtyRect, withHighlight: clicked)

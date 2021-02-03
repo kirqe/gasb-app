@@ -32,7 +32,7 @@
 		0753849B2571575200B62EF7 /* ViewStatsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0753849A2571575200B62EF7 /* ViewStatsViewModel.swift */; };
 		07599856256E815900FB60B8 /* gasb.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 07599836256E71F600FB60B8 /* gasb.xcdatamodeld */; };
 		0759985C256E872900FB60B8 /* ViewArrayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0759985B256E872900FB60B8 /* ViewArrayController.swift */; };
-		0778479925955F7C0032F3C8 /* AccessViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0778479825955F7C0032F3C8 /* AccessViewModel.swift */; };
+		077C153825CAE90200F5AEC2 /* AccessViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 077C153725CAE90200F5AEC2 /* AccessViewModel.swift */; };
 		07A20BB2256984710009EAC2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A20BB1256984710009EAC2 /* AppDelegate.swift */; };
 		07A20BB4256984730009EAC2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07A20BB3256984730009EAC2 /* Assets.xcassets */; };
 		07A20BB7256984730009EAC2 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07A20BB5256984730009EAC2 /* MainMenu.xib */; };
@@ -68,7 +68,7 @@
 		0753849A2571575200B62EF7 /* ViewStatsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewStatsViewModel.swift; sourceTree = "<group>"; };
 		07599837256E71F600FB60B8 /* gasb.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = gasb.xcdatamodel; sourceTree = "<group>"; };
 		0759985B256E872900FB60B8 /* ViewArrayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewArrayController.swift; sourceTree = "<group>"; };
-		0778479825955F7C0032F3C8 /* AccessViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessViewModel.swift; sourceTree = "<group>"; };
+		077C153725CAE90200F5AEC2 /* AccessViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessViewModel.swift; sourceTree = "<group>"; };
 		07A20BAE256984710009EAC2 /* gasb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gasb.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		07A20BB1256984710009EAC2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		07A20BB3256984730009EAC2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -107,7 +107,7 @@
 			children = (
 				07235A92256E594600449CE8 /* ViewModel.swift */,
 				0753849A2571575200B62EF7 /* ViewStatsViewModel.swift */,
-				0778479825955F7C0032F3C8 /* AccessViewModel.swift */,
+				077C153725CAE90200F5AEC2 /* AccessViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -291,6 +291,7 @@
 				07BB72D925C23546009998CC /* StatusItem.swift in Sources */,
 				0711532B256D3B84004BA215 /* ViewController.swift in Sources */,
 				072D5A5A25A8CBB9000688B1 /* TokenError.swift in Sources */,
+				077C153825CAE90200F5AEC2 /* AccessViewModel.swift in Sources */,
 				075245DC256EA2D2008F9F0A /* View+CoreDataProperties.swift in Sources */,
 				07FDD7B525AC892400829469 /* Store.swift in Sources */,
 				0716326B25BFB5530043A65A /* StatusItemSectionView.swift in Sources */,
@@ -307,7 +308,6 @@
 				075245DB256EA2D2008F9F0A /* View+CoreDataClass.swift in Sources */,
 				0717838D25700FB900BB6FB2 /* TableCheckbox.swift in Sources */,
 				07462A76256C7A6B00979375 /* ViewStatsView.swift in Sources */,
-				0778479925955F7C0032F3C8 /* AccessViewModel.swift in Sources */,
 				0753849B2571575200B62EF7 /* ViewStatsViewModel.swift in Sources */,
 				071A84BC258638D500E60E01 /* CoreDataManager.swift in Sources */,
 				07A20BB2256984710009EAC2 /* AppDelegate.swift in Sources */,
@@ -455,7 +455,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = kirqe.be.gasb;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -476,7 +476,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = kirqe.be.gasb;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

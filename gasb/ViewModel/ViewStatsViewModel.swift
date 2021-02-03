@@ -73,14 +73,10 @@ class ViewStatsViewModel {
         self.week = view.week
         self.month = view.month
         
-        self.nowValue   = store.get(key: "now:\(self.id):\(self.metric)")
-        self.dayValue   = store.get(key: "day:\(self.id):\(self.metric)")
-        self.weekValue  = store.get(key: "week:\(self.id):\(self.metric)")
-        self.monthValue = store.get(key: "month:\(self.id):\(self.metric)")
+        loadValuesFrom(store)
     }
     
     private func valueDidUpdate(key: String, value: Int) {
-        print("call valueDidUpdate")
         NotificationCenter.default.post(name: NSNotification.Name("ViewStatsVMValuesUpdated"), object: nil, userInfo: [key: value])
     }
     
@@ -89,17 +85,17 @@ class ViewStatsViewModel {
         
         Session.shared.getStatus(of: term) { object in
             if let value = object.value, let term = object.term  {
-                print("key: \(term), value: \(value)")
+//                print("key: \(term), value: \(value)")
                 store.set(key: term, value: value)
                             
-                self.reloadValuesFrom(store: store)
+                self.loadValuesFrom(store)
                             
              }
             completion()
         }
     }
     
-    func reloadValuesFrom(store: Store) {
+    func loadValuesFrom(_ store: Store) {
         self.nowValue   = store.get(key: "now:\(self.id):\(self.metric)")
         self.dayValue   = store.get(key: "day:\(self.id):\(self.metric)")
         self.weekValue  = store.get(key: "week:\(self.id):\(self.metric)")
