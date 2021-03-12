@@ -13,8 +13,12 @@ class AccessViewModel {
     let keychain = KeychainSwift()
     
     var isAuthenticated: Bool {
-       keychain.get("accessToken") == nil
+       keychain.get("accessToken") != nil
     }
+    
+    let successMessage = "Success!\nYou can now close this window\nor authenticate with a new account."
+    let formatErrorMessage = "Invalid email format or password is too short"
+    let connectionErrorMessage = "Error connecting to the server"
     
     var statusMessage: String = ""
     
@@ -25,8 +29,6 @@ class AccessViewModel {
     }
     
     func logIn(email: String, password: String, completion: @escaping(String) -> Void) {
-        
-        
         if isValidEmail(email) && isValidPassword(password) {
             self.isBeingAuthenticated = true
             
@@ -38,29 +40,29 @@ class AccessViewModel {
                     }
                     self.isBeingAuthenticated = false
                     self.checkToken()
+                    sleep(2)
                     completion(self.statusMessage)
                 case .failure(_):
-                    self.statusMessage = "Error connecting to the server"
+                    self.statusMessage = self.connectionErrorMessage
                     self.checkToken()
                     self.isBeingAuthenticated = false
                     completion(self.statusMessage)
                 }
             }
         } else {
-            self.statusMessage = "Invalid email format or password is too short"
+            self.statusMessage = self.formatErrorMessage
             self.isBeingAuthenticated = false
             completion(self.statusMessage)
         }
-        
     }
     
     func checkToken() {
         DispatchQueue.main.async {
             if self.isAuthenticated {
-                NotificationCenter.default.post(name: NSNotification.Name("InvalidCredentialsEntered"), object: nil)
-            } else {
                 NotificationCenter.default.post(name: NSNotification.Name("ValidCredentialsEntered"), object: nil)
-                self.statusMessage = "Success! \nClose this window or authenticate with new account"
+                self.statusMessage = self.successMessage
+            } else {
+                NotificationCenter.default.post(name: NSNotification.Name("InvalidCredentialsEntered"), object: nil)                            
             }
         }
     }

@@ -138,7 +138,7 @@ class Session {
     
     
     func getToken(email: String, password: String, completion: @escaping(Result<Token>) -> Void) {
-        let httpBody = "{\"email\": \"\(email)\", \"password\": \"\(password)\"}"
+        let httpBody = "{\"email\": \"\(email)\", \"password\": \"\(password)\"}".data(using: .utf8)!.base64EncodedString()
         
         dataRequest(with: "\(baseUrl!)/auth", httpMethod: "POST", httpBody: httpBody, objectType: Token.self) { (result: Result) in
             switch result {
@@ -163,7 +163,7 @@ class Session {
     }
 
     func getToken(refreshToken: String, completion: @escaping(Result<Token>) -> Void) {
-        let httpBody = "{\"rt\": \"\(refreshToken)\"}"
+        let httpBody = "{\"rt\": \"\(refreshToken)\"}".data(using: .utf8)!.base64EncodedString()
         
         dataRequest(with: "\(baseUrl!)/auth", httpMethod: "POST", httpBody: httpBody, objectType: Token.self) { (result: Result) in
             switch result {

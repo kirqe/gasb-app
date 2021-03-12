@@ -57,8 +57,8 @@
                                     </secureTextFieldCell>
                                 </secureTextField>
                                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="o0l-jB-IUq">
-                                    <rect key="frame" x="109" y="-7" width="74" height="32"/>
-                                    <buttonCell key="cell" type="push" title="Login" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="180-k6-5zC">
+                                    <rect key="frame" x="105" y="-7" width="83" height="32"/>
+                                    <buttonCell key="cell" type="push" title="Submit" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="180-k6-5zC">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="system"/>
                                     </buttonCell>

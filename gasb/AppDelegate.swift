@@ -181,7 +181,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         let pauseBtn = NSMenuItem(title: pauseStatus, action: #selector(togglePause), keyEquivalent: "")
         menu?.addItem(pauseBtn)
         
-        let displayMode = iconOnly ? "Show menu stats" : "Hide menu stats"
+        let displayMode = iconOnly ? "Show Menu Stats" : "Hide Menu Stats"
         let toggleMenuStatusBtn = NSMenuItem(title: displayMode, action: #selector(toggleDisplayMode), keyEquivalent: "")
         toggleMenuStatusBtn.isEnabled = !paused
         menu?.addItem(toggleMenuStatusBtn)
@@ -189,8 +189,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         menu?.addItem(NSMenuItem.separator())
         menu?.addItem(withTitle: "Auth", action: #selector(openAccessView), keyEquivalent: "")
         menu?.addItem(NSMenuItem.separator())
-        menu?.addItem(withTitle: "About gasb", action: #selector(openAbout), keyEquivalent: "")
-        menu?.addItem(withTitle: "Quit gasb", action: #selector(quitApp), keyEquivalent: "")
+        menu?.addItem(withTitle: "About Gasb", action: #selector(openAbout), keyEquivalent: "")
+        menu?.addItem(withTitle: "Quit Gasb", action: #selector(quitApp), keyEquivalent: "")
     }
     
     @objc func updateDataForViews() {
@@ -309,7 +309,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             accessViewWindow.makeKeyAndOrderFront(self)
         } else {
             let vc = ViewController()
-            vc.view = NSView(frame: NSRect(x: 0.0, y: 0.0, width: 330, height: 178))
+            vc.view = NSView(frame: NSRect(x: 0.0, y: 0.0, width: 330, height: 180))
             accessViewWindow = NSWindow(contentViewController: vc)
             
             let accessView = AccessView(viewModel: accessVM)

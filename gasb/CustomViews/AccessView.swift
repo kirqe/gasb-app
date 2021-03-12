@@ -35,7 +35,8 @@ class AccessView: NSView, LoadableView{
         
         _ = load(fromNIBNamed: "AccessView")
         
-        self.statusLabel.stringValue = viewModel.statusMessage
+        self.statusLabel.stringValue = viewModel.isAuthenticated ? viewModel.successMessage : ""
+        
         
         viewModel.checkToken()
     }

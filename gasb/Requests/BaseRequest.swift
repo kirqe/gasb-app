@@ -64,7 +64,6 @@ func dataRequest<T: Decodable>(with url: String, httpMethod: String, headers:Dic
         
         let decoder = JSONDecoder()
         do {
-//            print("REQ: \(String(decoding: data, as: UTF8.self))")
             let decodedObject = try decoder.decode(objectType.self, from: data)
             completion(Result.success(decodedObject))
         } catch let error {
