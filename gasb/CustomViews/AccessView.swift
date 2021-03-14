@@ -35,7 +35,7 @@ class AccessView: NSView, LoadableView{
         
         _ = load(fromNIBNamed: "AccessView")
         
-        self.statusLabel.stringValue = viewModel.isAuthenticated ? viewModel.successMessage : ""
+        self.statusLabel.stringValue = viewModel.isAuthenticated ? viewModel.successMessage : "Subscription is required."
         
         
         viewModel.checkToken()

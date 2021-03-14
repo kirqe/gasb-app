@@ -87,10 +87,10 @@ class ManageViewsView: NSView, LoadableView{
     func updateCount() {
         objCount = (viewModel.arrayController.arrangedObjects as AnyObject).count
         
-        if objCount == 1 {
+        if objCount == 0 {
             canAddView = true
             canDeleteView = false
-        } else if objCount > 1 && objCount < 3 {
+        } else if objCount >= 1 && objCount < 3 {
             canAddView = true
             canDeleteView = true
         } else {

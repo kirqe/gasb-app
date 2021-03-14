@@ -20,7 +20,6 @@ class ViewArrayController:  NSArrayController {
         }
     }
     
-
     override func removeObject(_ object: Any) {
         super.remove(object)
         do {

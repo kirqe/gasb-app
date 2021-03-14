@@ -18,13 +18,13 @@ class StatusItemSectionView: NSView, LoadableView {
     var statusItem: NSStatusItem?
     var viewItem: View?
     var viewModel: ViewStatsViewModel?
-    var value = 10000
     
     // https://github.com/Tao93/NetTool/blob/9c41248a9378ac1f3401d47a91e43e24b524804c/NeTool/StatusBarView.swift
     var clicked: Bool = false
     var darkMenuBar: Bool = false
   
-    init(frame frameRect: NSRect, viewModel: ViewStatsViewModel, statusItem: NSStatusItem, menu: NSMenu) {
+    
+    init(frame frameRect: NSRect, viewModel: ViewStatsViewModel) {
         super.init(frame: frameRect)
         
         self.viewModel = viewModel
@@ -38,6 +38,10 @@ class StatusItemSectionView: NSView, LoadableView {
        reloadLabels()
         
         DistributedNotificationCenter.default().addObserver(self, selector: #selector(change), name:NSNotification.Name(rawValue: "AppleInterfaceThemeChangedNotification"), object: nil)
+        
+//        var refreshDataTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(reloadLabels), userInfo: nil, repeats: true)
+//        refreshDataTimer.fire()
+//        RunLoop.current.add(refreshDataTimer, forMode: .common)
     }
     
     func isDarkMode() -> Bool {
@@ -68,12 +72,16 @@ class StatusItemSectionView: NSView, LoadableView {
     }
     
     override func draw(_ dirtyRect: NSRect) {
-        statusItem?.drawStatusBarBackground(in: dirtyRect, withHighlight: clicked)
-      
-       let textColor = (darkMenuBar || clicked) ? NSColor.white : NSColor.black
-        self.preTop.textColor = textColor
-        self.preBot.textColor = textColor
-        self.topValue.textColor = textColor
-        self.botValue.textColor = textColor
+        if #available(OSX 11.0, *) {
+
+        } else {
+            statusItem?.drawStatusBarBackground(in: dirtyRect, withHighlight: clicked)
+            let textColor = (darkMenuBar || clicked) ? NSColor.white : NSColor.black
+            self.preTop.textColor = textColor
+            self.preBot.textColor = textColor
+            self.topValue.textColor = textColor
+            self.botValue.textColor = textColor
+        }
     }
 }
+

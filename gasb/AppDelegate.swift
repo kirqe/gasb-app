@@ -34,6 +34,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     var iconWidth: CGFloat = CGFloat(30)
     var statusWidth: CGFloat = CGFloat(0)
     var stack: NSStackView?
+    var interval: Double = Double.random(in: 5...8)
 
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -81,10 +82,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.setItems() // take views from coreData
-            self.updateDataForViews() // fetch new data on initial launch
+            self.updateDataForViews() // fetch new data on the initial launch
         }
 
-        refreshDataTimer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(updateDataForViews), userInfo: nil, repeats: true)
+        refreshDataTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(updateDataForViews), userInfo: nil, repeats: true)
         refreshDataTimer?.fire()
         
         RunLoop.current.add(refreshDataTimer!, forMode: .common)
@@ -94,20 +95,28 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         if paused || iconOnly {
             statusItem?.button?.constraints.forEach {$0.isActive = false}
             statusItem?.length = iconWidth
+  
+            let itemImage = NSImage(named: "menubar3")
+            itemImage?.isTemplate = true
+            statusItem?.button?.image = itemImage
+            statusItem?.button?.imagePosition = NSControl.ImagePosition.imageLeft
+            stack!.removeFromSuperview()
+       
+            
         } else {
             statusItem?.button?.constraints.forEach {$0.isActive = true}
-            statusWidth = statusItem?.length ?? iconWidth
+//            statusWidth = statusItem?.length ?? iconWidth
             
-            let newWidth: CGFloat = statusItem?.button?.subviews.reduce(iconWidth, { x, y in
-                x + y.frame.width
-            }) ?? iconWidth
-            
-            
-            if newWidth > statusItem!.length {
-                statusItem?.length += (newWidth - statusItem!.length)
-            } else {
-                statusItem?.length = newWidth
-            }
+//            let newWidth: CGFloat = statusItem?.button?.subviews.reduce(iconWidth, { x, y in
+//                x + y.frame.width
+//            }) ?? iconWidth
+//
+//
+//            if newWidth > statusItem!.length {
+//                statusItem?.length += (newWidth - statusItem!.length)
+//            } else {
+//                statusItem?.length = newWidth
+//            }
         }
        
     }
@@ -116,43 +125,41 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     @objc func configureStatusItem() {
         // Status Bar
         var views: [StatusItemSectionView] = []
-        
         for item in statsViewModels {
-            
             if item.isValid {
                 let section = StatusItemSectionView(
                     frame: NSRect(),
-                    viewModel: item,
-                    statusItem: statusItem!,
-                    menu: menu
+                    viewModel: item
                 )
-                
                 views.append(section)
-                
             }
-            
         }
-
         
         let statusBar = NSStatusBar.system
         statusItem = statusBar.statusItem(withLength: NSStatusItem.variableLength)
         statusItem?.button?.action = #selector(self.statusBarButtonClicked(sender:))
         
         // Status Bar Icon
-        let itemImage = NSImage(named: "menubar3")
-        itemImage?.isTemplate = true
-        statusItem?.button?.image = itemImage
-        statusItem?.button?.imagePosition = NSControl.ImagePosition.imageLeft
-        
-
         stack = NSStackView(views: views)
         stack?.translatesAutoresizingMaskIntoConstraints = false
-        
-        statusItem?.button?.addSubview(stack!)
 
-        statusItem?.button?.addConstraint(NSLayoutConstraint(item: stack!, attribute: .leading, relatedBy: .equal, toItem: statusItem?.button, attribute: .leading, multiplier: 1, constant: 30))
+        statusItem?.button?.addSubview(stack!)
         
+        statusItem?.button?.addConstraint(NSLayoutConstraint(item: stack!, attribute: .width, relatedBy: .greaterThanOrEqual, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 30))
+                
+        statusItem?.button?.addConstraint(NSLayoutConstraint(item: stack!, attribute: .leading, relatedBy: .equal, toItem: statusItem?.button, attribute: .leading, multiplier: 1, constant: 5))
+
         statusItem?.button?.addConstraint(NSLayoutConstraint(item: stack!, attribute: .trailing, relatedBy: .equal, toItem: statusItem?.button, attribute: .trailing, multiplier: 1, constant: -5))
+        
+        
+        if paused || views.count == 0 {
+            let itemImage = NSImage(named: "menubar3")
+            itemImage?.isTemplate = true
+            statusItem?.button?.image = itemImage
+            statusItem?.button?.imagePosition = NSControl.ImagePosition.imageLeft
+            
+            stack!.removeFromSuperview()
+        }
     }
     
     
@@ -187,7 +194,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         menu?.addItem(toggleMenuStatusBtn)
         
         menu?.addItem(NSMenuItem.separator())
-        menu?.addItem(withTitle: "Auth", action: #selector(openAccessView), keyEquivalent: "")
+        menu?.addItem(withTitle: "Authenticate", action: #selector(openAccessView), keyEquivalent: "")
         menu?.addItem(NSMenuItem.separator())
         menu?.addItem(withTitle: "About Gasb", action: #selector(openAbout), keyEquivalent: "")
         menu?.addItem(withTitle: "Quit Gasb", action: #selector(quitApp), keyEquivalent: "")
@@ -270,7 +277,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     }
     
     @objc func resume() {
-        refreshDataTimer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(updateDataForViews), userInfo: nil, repeats: true)
+        refreshDataTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(updateDataForViews), userInfo: nil, repeats: true)
         refreshDataTimer?.fire()
         RunLoop.current.add(refreshDataTimer!, forMode: .common)
         
@@ -316,7 +323,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             
             accessView.add(toView: vc.view)
             
-            accessViewWindow.title = "Auth"
+            accessViewWindow.title = "Authenticate"
             accessViewWindow.makeKeyAndOrderFront(self)
         }
     }

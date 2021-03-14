@@ -25,6 +25,7 @@
 		07462A6F256C087F00979375 /* ManageViewsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07462A6E256C087F00979375 /* ManageViewsView.xib */; };
 		07462A76256C7A6B00979375 /* ViewStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07462A75256C7A6B00979375 /* ViewStatsView.swift */; };
 		07462A78256C7A8000979375 /* ViewStatsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07462A77256C7A8000979375 /* ViewStatsView.xib */; };
+		0748CB1125FD3E29000D927F /* MenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0748CB1025FD3E28000D927F /* MenuBar.swift */; };
 		07496B4E259214FF001A3A7C /* AccessView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07496B4D259214FF001A3A7C /* AccessView.xib */; };
 		07496B50259216A9001A3A7C /* AccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07496B4F259216A9001A3A7C /* AccessView.swift */; };
 		075245DB256EA2D2008F9F0A /* View+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075245D9256EA2D2008F9F0A /* View+CoreDataClass.swift */; };
@@ -61,6 +62,7 @@
 		07462A6E256C087F00979375 /* ManageViewsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ManageViewsView.xib; sourceTree = "<group>"; };
 		07462A75256C7A6B00979375 /* ViewStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewStatsView.swift; sourceTree = "<group>"; };
 		07462A77256C7A8000979375 /* ViewStatsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ViewStatsView.xib; sourceTree = "<group>"; };
+		0748CB1025FD3E28000D927F /* MenuBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBar.swift; sourceTree = "<group>"; };
 		07496B4D259214FF001A3A7C /* AccessView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AccessView.xib; sourceTree = "<group>"; };
 		07496B4F259216A9001A3A7C /* AccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessView.swift; sourceTree = "<group>"; };
 		075245D9256EA2D2008F9F0A /* View+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -201,6 +203,7 @@
 				0759985B256E872900FB60B8 /* ViewArrayController.swift */,
 				07FDD7B425AC892400829469 /* Store.swift */,
 				0724509A25B0B96900FFD0DA /* App.plist */,
+				0748CB1025FD3E28000D927F /* MenuBar.swift */,
 			);
 			path = gasb;
 			sourceTree = "<group>";
@@ -235,7 +238,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1130;
-				LastUpgradeCheck = 1130;
+				LastUpgradeCheck = 1240;
 				ORGANIZATIONNAME = kirqe;
 				TargetAttributes = {
 					07A20BAD256984710009EAC2 = {
@@ -292,6 +295,7 @@
 				0711532B256D3B84004BA215 /* ViewController.swift in Sources */,
 				072D5A5A25A8CBB9000688B1 /* TokenError.swift in Sources */,
 				077C153825CAE90200F5AEC2 /* AccessViewModel.swift in Sources */,
+				0748CB1125FD3E29000D927F /* MenuBar.swift in Sources */,
 				075245DC256EA2D2008F9F0A /* View+CoreDataProperties.swift in Sources */,
 				07FDD7B525AC892400829469 /* Store.swift in Sources */,
 				0716326B25BFB5530043A65A /* StatusItemSectionView.swift in Sources */,
@@ -354,6 +358,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -378,7 +383,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -414,6 +419,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -432,7 +438,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -446,6 +452,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = gasb/gasb.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 8V6W97488V;
@@ -455,9 +462,10 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = kirqe.be.gasb;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -467,6 +475,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = gasb/gasb.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 8V6W97488V;
@@ -476,9 +485,10 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = kirqe.be.gasb;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
