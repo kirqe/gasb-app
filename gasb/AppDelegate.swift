@@ -21,7 +21,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     
     // views and windows
     lazy var manageViewWindow = NSWindow()
-    lazy var accessViewWindow = NSWindow()
+//    lazy var accessViewWindow = NSWindow()
     
     var items: [View] = [] // view items from coreData
     var statsViewModels: [ViewStatsViewModel] = [] // for menu views
@@ -182,8 +182,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         
         // draw generic elements
         menu?.addItem(NSMenuItem.separator())
-        menu?.addItem(withTitle: "Manage Views", action: #selector(openManageViewsView), keyEquivalent: "")
-        
         let pauseStatus = paused ? "Resume" : "Pause"
         let pauseBtn = NSMenuItem(title: pauseStatus, action: #selector(togglePause), keyEquivalent: "")
         menu?.addItem(pauseBtn)
@@ -194,7 +192,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         menu?.addItem(toggleMenuStatusBtn)
         
         menu?.addItem(NSMenuItem.separator())
-        menu?.addItem(withTitle: "Authenticate", action: #selector(openAccessView), keyEquivalent: "")
+        menu?.addItem(withTitle: "Preferences...", action: #selector(openManageViewsView), keyEquivalent: "")
+
         menu?.addItem(NSMenuItem.separator())
         menu?.addItem(withTitle: "About Gasb", action: #selector(openAbout), keyEquivalent: "")
         menu?.addItem(withTitle: "Quit Gasb", action: #selector(quitApp), keyEquivalent: "")
@@ -257,7 +256,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     // MARK: - Handling clicking on menuItems
     @objc func openManageViewsView() {
         let vc = ViewController()
-        vc.view = NSView(frame: NSRect(x: 0.0, y: 0.0, width: 550, height: 210))
+        vc.view = NSView(frame: NSRect(x: 0.0, y: 0.0, width: 550, height: 250))
         
         if NSApp.windows.contains(manageViewWindow) {
             manageViewWindow.makeKeyAndOrderFront(self)
@@ -266,7 +265,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             let manageViewsView = ManageViewsView()
             
             manageViewsView.add(toView: vc.view)
-            manageViewWindow.title = "Manage Views"
+            manageViewWindow.title = "Preferences"
             manageViewWindow.makeKeyAndOrderFront(self)
         }
     }
@@ -306,25 +305,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         updateStatusItemWidth()
         configureStatusItem()
     }
-    
-    @objc func openAccessView() {
-        let accessVM = AccessViewModel()
-        
-        if NSApp.windows.contains(accessViewWindow) {
-            accessViewWindow.makeKeyAndOrderFront(self)
-        } else {
-            let vc = ViewController()
-            vc.view = NSView(frame: NSRect(x: 0.0, y: 0.0, width: 330, height: 180))
-            accessViewWindow = NSWindow(contentViewController: vc)
-            
-            let accessView = AccessView(viewModel: accessVM)
-            
-            accessView.add(toView: vc.view)
-            
-            accessViewWindow.title = "Authenticate"
-            accessViewWindow.makeKeyAndOrderFront(self)
-        }
-    }
+
     
     @objc func openAbout() {
         NSApp.orderFrontStandardAboutPanel(self)
