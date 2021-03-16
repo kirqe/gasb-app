@@ -39,9 +39,9 @@ class StatusItemSectionView: NSView, LoadableView {
         
         DistributedNotificationCenter.default().addObserver(self, selector: #selector(change), name:NSNotification.Name(rawValue: "AppleInterfaceThemeChangedNotification"), object: nil)
         
-        var refreshDataTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(reloadLabels), userInfo: nil, repeats: true)
-        refreshDataTimer.fire()
-        RunLoop.current.add(refreshDataTimer, forMode: .common)
+//        var refreshDataTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(reloadLabels), userInfo: nil, repeats: true)
+//        refreshDataTimer.fire()
+//        RunLoop.current.add(refreshDataTimer, forMode: .common)
     }
     
     func isDarkMode() -> Bool {
@@ -66,7 +66,7 @@ class StatusItemSectionView: NSView, LoadableView {
     @objc func reloadLabels() {
         // check if enabled
         DispatchQueue.main.async {
-            self.topValue?.stringValue = "\(Int.random(in: 0...100000))" //"\(self.viewModel?.nowValue ?? 0)"
+            self.topValue?.stringValue = "\(self.viewModel?.nowValue ?? 0)"
             self.botValue?.stringValue = "\(self.viewModel?.dayValue ?? 0)"
         }
     }

@@ -12,6 +12,7 @@ import CoreData
 
 class ManageViewsView: NSView, LoadableView{
     var viewModel = ViewModel()
+    lazy var accessViewWindow = NSWindow()
     
     @objc dynamic var canAddView = true
     @objc dynamic var canDeleteView = true
@@ -100,5 +101,25 @@ class ManageViewsView: NSView, LoadableView{
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+    }
+    
+    
+    @IBAction func openAuth(_ sender: NSButton) {
+        let accessVM = AccessViewModel()
+        
+        if NSApp.windows.contains(accessViewWindow) {
+            accessViewWindow.makeKeyAndOrderFront(self)
+        } else {
+            let vc = ViewController()
+            vc.view = NSView(frame: NSRect(x: 0.0, y: 0.0, width: 330, height: 180))
+            accessViewWindow = NSWindow(contentViewController: vc)
+            
+            let accessView = AccessView(viewModel: accessVM)
+            
+            accessView.add(toView: vc.view)
+            
+            accessViewWindow.title = "Authenticate"
+            accessViewWindow.makeKeyAndOrderFront(self)
+        }
     }
 }
