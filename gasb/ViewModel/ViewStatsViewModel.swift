@@ -44,7 +44,7 @@ class ViewStatsViewModel {
     var maxLength: Int = 10
     
     var isValid: Bool {
-        return (!self.id.isEmpty) &&
+        return (!self.id.isEmpty) && (self.id.count > 3) &&
                (self.now! || self.day! || self.week! || self.month!)
     }
     
@@ -66,7 +66,7 @@ class ViewStatsViewModel {
     
     init(view: View, store: Store) {
         self.view = view
-        self.id = view.id ?? ""
+        self.id = "\(view.id)"
         
         self.now = view.now
         self.day = view.day

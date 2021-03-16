@@ -94,9 +94,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     @objc func updateStatusItemWidth() {
         if paused || iconOnly {
             statusItem?.button?.constraints.forEach {$0.isActive = false}
-            statusItem?.length = iconWidth
+//            statusItem?.length = iconWidth
   
-            let itemImage = NSImage(named: "menubar3")
+            let itemImage = NSImage(named: "menubar4")
             itemImage?.isTemplate = true
             statusItem?.button?.image = itemImage
             statusItem?.button?.imagePosition = NSControl.ImagePosition.imageLeft
@@ -106,7 +106,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         } else {
             statusItem?.button?.constraints.forEach {$0.isActive = true}
 //            statusWidth = statusItem?.length ?? iconWidth
-            
+//
 //            let newWidth: CGFloat = statusItem?.button?.subviews.reduce(iconWidth, { x, y in
 //                x + y.frame.width
 //            }) ?? iconWidth
@@ -145,7 +145,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
         statusItem?.button?.addSubview(stack!)
         
-        statusItem?.button?.addConstraint(NSLayoutConstraint(item: stack!, attribute: .width, relatedBy: .greaterThanOrEqual, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 30))
+        statusItem?.button?.addConstraint(NSLayoutConstraint(item: stack!, attribute: .width, relatedBy: .greaterThanOrEqual, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 0))
                 
         statusItem?.button?.addConstraint(NSLayoutConstraint(item: stack!, attribute: .leading, relatedBy: .equal, toItem: statusItem?.button, attribute: .leading, multiplier: 1, constant: 5))
 
@@ -153,7 +153,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         
         
         if paused || views.count == 0 {
-            let itemImage = NSImage(named: "menubar3")
+            let itemImage = NSImage(named: "menubar4")
             itemImage?.isTemplate = true
             statusItem?.button?.image = itemImage
             statusItem?.button?.imagePosition = NSControl.ImagePosition.imageLeft
@@ -285,8 +285,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         if !iconOnly {
             configureStatusItem()
         }
-            
-        updateStatusItemWidth()
     }
     
     @objc func togglePause() {

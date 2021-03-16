@@ -24,7 +24,7 @@ class ManageViewsView: NSView, LoadableView{
     @IBAction func addButtonClicked(_ sender: NSButton) {
         let view = View(context: viewModel.moc)
         view.name = "my bookstore"
-        view.id = ""
+        view.id = 0
         view.now = true
         view.day = true
         viewModel.arrayController.addObject(view)

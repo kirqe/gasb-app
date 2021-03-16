@@ -15,8 +15,10 @@ class TableTextField: NSTextField {
         super.draw(dirtyRect)
         
         // Drawing code here.
+        
     }
 
+    
     override func textDidEndEditing(_ notification: Notification) {
         super.textDidEndEditing(notification)
         

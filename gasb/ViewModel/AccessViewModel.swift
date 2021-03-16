@@ -16,7 +16,7 @@ class AccessViewModel {
        keychain.get("accessToken") != nil
     }
     
-    let successMessage = "Success!\nYou can now close this window\nor authenticate with a new account."
+    let successMessage = "Success!"
     let formatErrorMessage = "Invalid email format or password is too short"
     let connectionErrorMessage = "Error connecting to the server"
     
@@ -25,7 +25,7 @@ class AccessViewModel {
     var isBeingAuthenticated: Bool = false
     
     init() {
-        self.checkToken()
+//        self.checkToken()
     }
     
     func logIn(email: String, password: String, completion: @escaping(String) -> Void) {

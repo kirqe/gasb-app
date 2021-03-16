@@ -2,8 +2,8 @@
 //  View+CoreDataProperties.swift
 //  gasb
 //
-//  Created by Kirill Beletskiy on 25/11/2020.
-//  Copyright © 2020 kirqe. All rights reserved.
+//  Created by Kirill Beletskiy on 3/16/21.
+//  Copyright © 2021 kirqe. All rights reserved.
 //
 //
 
@@ -18,7 +18,7 @@ extension View {
     }
 
     @NSManaged public var day: Bool
-    @NSManaged public var id: String?
+    @NSManaged public var id: Int64
     @NSManaged public var month: Bool
     @NSManaged public var name: String?
     @NSManaged public var now: Bool

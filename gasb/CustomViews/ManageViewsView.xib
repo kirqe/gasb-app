@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -37,7 +37,6 @@
                                 <tableColumns>
                                     <tableColumn width="153" minWidth="40" maxWidth="1000" id="Hz9-wM-5Z3">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Friendly Name">
-                                            <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                         </tableHeaderCell>
@@ -49,11 +48,11 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView id="ODr-nq-ToV">
-                                                <rect key="frame" x="1" y="5" width="153" height="17"/>
+                                                <rect key="frame" x="11" y="5" width="158" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textField identifier="nameCell" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="czA-GS-nrW" customClass="TableTextField" customModule="gasb" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="153" height="17"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="158" height="17"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" placeholderString="Friendly Name" id="3yF-ez-4AJ">
                                                             <font key="font" metaFont="system"/>
@@ -77,7 +76,6 @@
                                     </tableColumn>
                                     <tableColumn width="123" minWidth="40" maxWidth="1000" id="Sna-30-k1O">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="View ID">
-                                            <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                         </tableHeaderCell>
@@ -89,13 +87,14 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView id="YmG-3d-bUn">
-                                                <rect key="frame" x="157" y="5" width="123" height="17"/>
+                                                <rect key="frame" x="172" y="5" width="123" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uue-u4-Ctg" customClass="TableTextField" customModule="gasb" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="123" height="17"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" placeholderString="View ID" id="tJe-xF-Y82">
+                                                            <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="7YO-at-oNl"/>
                                                             <font key="font" metaFont="system"/>
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -115,9 +114,8 @@
                                             </tableCellView>
                                         </prototypeCellViews>
                                     </tableColumn>
-                                    <tableColumn width="265" minWidth="10" maxWidth="3.4028234663852886e+38" id="p2J-cc-hTr">
+                                    <tableColumn width="236" minWidth="10" maxWidth="3.4028234663852886e+38" id="p2J-cc-hTr">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Report Kinds">
-                                            <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </tableHeaderCell>
@@ -129,7 +127,7 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView id="iIW-79-Que">
-                                                <rect key="frame" x="283" y="5" width="265" height="17"/>
+                                                <rect key="frame" x="298" y="5" width="240" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <button verticalHuggingPriority="750" id="xdY-EU-Gcq" customClass="TableCheckbox" customModule="gasb" customModuleProvider="target">
@@ -205,10 +203,10 @@
                             <rect key="frame" x="10" y="35" width="530" height="50"/>
                             <subviews>
                                 <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="20" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AGP-Ue-fRx">
-                                    <rect key="frame" x="0.0" y="15" width="90" height="21"/>
+                                    <rect key="frame" x="0.0" y="15" width="90" height="20"/>
                                     <subviews>
                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1Y3-b1-PIN">
-                                            <rect key="frame" x="-6" y="-7" width="47" height="32"/>
+                                            <rect key="frame" x="-7" y="-7" width="49" height="32"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="35" id="UtH-0E-bJL"/>
                                             </constraints>
@@ -221,7 +219,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ltY-CC-Cly">
-                                            <rect key="frame" x="49" y="-7" width="47" height="32"/>
+                                            <rect key="frame" x="48" y="-7" width="49" height="32"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="35" id="Ghu-rk-yPq"/>
                                             </constraints>
@@ -244,7 +242,7 @@
                                     </customSpacing>
                                 </stackView>
                                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gCq-n4-r82">
-                                    <rect key="frame" x="464" y="8" width="72" height="32"/>
+                                    <rect key="frame" x="463" y="8" width="74" height="32"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="60" id="nfV-TU-seA"/>
                                     </constraints>
@@ -284,7 +282,7 @@
                                     </textFieldCell>
                                 </textField>
                                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wMi-dm-pu2">
-                                    <rect key="frame" x="59" y="13" width="103" height="18"/>
+                                    <rect key="frame" x="58" y="13" width="102" height="18"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="100" id="5ls-Hz-ozI"/>
                                     </constraints>
@@ -297,7 +295,7 @@
                                     </connections>
                                 </button>
                                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="38I-Da-0Cv">
-                                    <rect key="frame" x="159" y="13" width="93" height="18"/>
+                                    <rect key="frame" x="158" y="13" width="92" height="18"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="90" id="vSH-GL-ICL"/>
                                     </constraints>
@@ -310,7 +308,7 @@
                                     </connections>
                                 </button>
                                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ARH-uz-6f8">
-                                    <rect key="frame" x="249" y="13" width="63" height="18"/>
+                                    <rect key="frame" x="248" y="13" width="62" height="18"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="60" id="TB3-E5-edt"/>
                                     </constraints>
@@ -369,7 +367,7 @@
         <userDefaultsController representsSharedInstance="YES" id="1Y6-lp-C5g"/>
     </objects>
     <resources>
-        <image name="NSAddTemplate" width="11" height="11"/>
-        <image name="NSRemoveTemplate" width="11" height="11"/>
+        <image name="NSAddTemplate" width="14" height="13"/>
+        <image name="NSRemoveTemplate" width="14" height="4"/>
     </resources>
 </document>
