@@ -19,25 +19,26 @@ enum Kind: String, CaseIterable {
 class ViewStatsViewModel {
     var view: View?
     var id: String
-    
+    var subject: String!
+
     var nowValue: Int? {
         didSet {
-            valueDidUpdate(key: "now:\(self.id):\(self.metric)", value: self.nowValue ?? 0)
+            valueDidUpdate(key: "now:\(self.subject.lowercased()):\(self.id):\(self.metric)", value: self.nowValue ?? 0)
         }
     }
     var dayValue: Int? {
         didSet {
-            valueDidUpdate(key: "day:\(self.id):\(self.metric)", value: self.dayValue ?? 0)
+            valueDidUpdate(key: "day:\(self.subject.lowercased()):\(self.id):\(self.metric)", value: self.dayValue ?? 0)
         }
     }
     var weekValue: Int? {
         didSet {
-            valueDidUpdate(key: "week:\(self.id):\(self.metric)", value: self.weekValue ?? 0)
+            valueDidUpdate(key: "week:\(self.subject.lowercased()):\(self.id):\(self.metric)", value: self.weekValue ?? 0)
         }
     }
     var monthValue: Int? {
         didSet {
-            valueDidUpdate(key: "month:\(self.id):\(self.metric)", value: self.monthValue ?? 0)
+            valueDidUpdate(key: "month:\(self.subject.lowercased()):\(self.id):\(self.metric)", value: self.monthValue ?? 0)
         }
     }
     
@@ -48,25 +49,23 @@ class ViewStatsViewModel {
                (self.now! || self.day! || self.week! || self.month!)
     }
     
-    
     // show or hide certain fields
     var now: Bool?
     var day: Bool?
     var week: Bool?
     var month: Bool?
     
-    var metric: String {
-        var metric = UserDefaults.standard.string(forKey: "metric")
-        if metric == nil {
-            metric = "sessions"
-        }
-        return metric!.lowercased()
+    var metric: String {    
+        return (subject == "View") ?
+            (UserDefaults.standard.string(forKey: "ga3_metric") ?? "PageViews") :
+            (UserDefaults.standard.string(forKey: "ga4_metric") ?? "ScreenPageViews")
     }
     
     
     init(view: View, store: Store) {
         self.view = view
         self.id = "\(view.id)"
+        self.subject = view.subject
         
         self.now = view.now
         self.day = view.day
@@ -81,25 +80,35 @@ class ViewStatsViewModel {
     }
     
     func updateValue(kind: Kind, store: Store, completion: @escaping() -> ()) {
-        let term = kind.rawValue + ":" + self.id + ":" + self.metric
+        let term = kind.rawValue + ":" + self.subject.lowercased() + ":" + self.id + ":" + self.metric
         
-        Session.shared.getStatus(of: term) { object in
-            if let value = object.value, let term = object.term  {
-//                print("key: \(term), value: \(value)")
-                store.set(key: term, value: value)
-                            
-                self.loadValuesFrom(store)
-                            
-             }
-            completion()
+        let mirror = Mirror(reflecting: self)
+        
+//        let kinds = Kind.allCases.map { $0.rawValue }
+
+
+        
+        for case let (label?, value) in mirror.children {
+            if label == kind.rawValue {
+                if value as! Bool {
+                    Session.shared.getStatus(of: term) { object in
+                        if let value = object.value, let term = object.term  {
+                            // print("key: \(term), value: \(value)")
+                            store.set(key: term, value: value)
+                            self.loadValuesFrom(store)
+                        }
+                        completion()
+                    }
+                }
+            }
         }
     }
     
     func loadValuesFrom(_ store: Store) {
-        self.nowValue   = store.get(key: "now:\(self.id):\(self.metric)")
-        self.dayValue   = store.get(key: "day:\(self.id):\(self.metric)")
-        self.weekValue  = store.get(key: "week:\(self.id):\(self.metric)")
-        self.monthValue = store.get(key: "month:\(self.id):\(self.metric)")
+        self.nowValue   = store.get(key: "now:\(self.subject.lowercased()):\(self.id):\(self.metric)")
+        self.dayValue   = store.get(key: "day:\(self.subject.lowercased()):\(self.id):\(self.metric)")
+        self.weekValue  = store.get(key: "week:\(self.subject.lowercased()):\(self.id):\(self.metric)")
+        self.monthValue = store.get(key: "month:\(self.subject.lowercased()):\(self.id):\(self.metric)")
     }
 }
 

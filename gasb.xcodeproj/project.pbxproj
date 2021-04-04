@@ -32,7 +32,6 @@
 		07599856256E815900FB60B8 /* gasb.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 07599836256E71F600FB60B8 /* gasb.xcdatamodeld */; };
 		0759985C256E872900FB60B8 /* ViewArrayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0759985B256E872900FB60B8 /* ViewArrayController.swift */; };
 		07658F732600468C00055554 /* View+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07658F712600468C00055554 /* View+CoreDataClass.swift */; };
-		07658F742600468C00055554 /* View+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07658F722600468C00055554 /* View+CoreDataProperties.swift */; };
 		077C153825CAE90200F5AEC2 /* AccessViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 077C153725CAE90200F5AEC2 /* AccessViewModel.swift */; };
 		07A20BB2256984710009EAC2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A20BB1256984710009EAC2 /* AppDelegate.swift */; };
 		07A20BB4256984730009EAC2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07A20BB3256984730009EAC2 /* Assets.xcassets */; };
@@ -40,6 +39,8 @@
 		07BB72D925C23546009998CC /* StatusItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07BB72D825C23546009998CC /* StatusItem.swift */; };
 		07DE3F2B259F68F500BBD615 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 07DE3F2A259F68F500BBD615 /* KeychainSwift */; };
 		07F1F8C125B1E7210017C542 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F1F8C025B1E7200017C542 /* CustomTextField.swift */; };
+		07FCC7BE2613F6A400D0ED08 /* TableSubjectPopUpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07FCC7BD2613F6A400D0ED08 /* TableSubjectPopUpButton.swift */; };
+		07FCC7C22614010100D0ED08 /* View+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07FCC7C12614010000D0ED08 /* View+CoreDataProperties.swift */; };
 		07FDD7B525AC892400829469 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07FDD7B425AC892400829469 /* Store.swift */; };
 /* End PBXBuildFile section */
 
@@ -69,7 +70,6 @@
 		07599837256E71F600FB60B8 /* gasb.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = gasb.xcdatamodel; sourceTree = "<group>"; };
 		0759985B256E872900FB60B8 /* ViewArrayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewArrayController.swift; sourceTree = "<group>"; };
 		07658F712600468C00055554 /* View+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+CoreDataClass.swift"; sourceTree = "<group>"; };
-		07658F722600468C00055554 /* View+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		077C153725CAE90200F5AEC2 /* AccessViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessViewModel.swift; sourceTree = "<group>"; };
 		07A20BAE256984710009EAC2 /* gasb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gasb.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		07A20BB1256984710009EAC2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -79,6 +79,8 @@
 		07A20BB9256984730009EAC2 /* gasb.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = gasb.entitlements; sourceTree = "<group>"; };
 		07BB72D825C23546009998CC /* StatusItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusItem.swift; sourceTree = "<group>"; };
 		07F1F8C025B1E7200017C542 /* CustomTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
+		07FCC7BD2613F6A400D0ED08 /* TableSubjectPopUpButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableSubjectPopUpButton.swift; sourceTree = "<group>"; };
+		07FCC7C12614010000D0ED08 /* View+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		07FDD7B425AC892400829469 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -129,6 +131,7 @@
 				0717838A256FEDAB00BB6FB2 /* TableTextField.swift */,
 				0717838C25700FB900BB6FB2 /* TableCheckbox.swift */,
 				07BB72D825C23546009998CC /* StatusItem.swift */,
+				07FCC7BD2613F6A400D0ED08 /* TableSubjectPopUpButton.swift */,
 			);
 			path = Controlls;
 			sourceTree = "<group>";
@@ -161,7 +164,7 @@
 			isa = PBXGroup;
 			children = (
 				07658F712600468C00055554 /* View+CoreDataClass.swift */,
-				07658F722600468C00055554 /* View+CoreDataProperties.swift */,
+				07FCC7C12614010000D0ED08 /* View+CoreDataProperties.swift */,
 				071B12FB26003EF500601036 /* CoreDataManager.swift */,
 			);
 			path = CoreData;
@@ -289,14 +292,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07FCC7C22614010100D0ED08 /* View+CoreDataProperties.swift in Sources */,
 				07496B50259216A9001A3A7C /* AccessView.swift in Sources */,
 				072D5A5C25A8CFB3000688B1 /* Session.swift in Sources */,
-				07658F742600468C00055554 /* View+CoreDataProperties.swift in Sources */,
 				07BB72D925C23546009998CC /* StatusItem.swift in Sources */,
 				0711532B256D3B84004BA215 /* ViewController.swift in Sources */,
 				072D5A5A25A8CBB9000688B1 /* TokenError.swift in Sources */,
 				077C153825CAE90200F5AEC2 /* AccessViewModel.swift in Sources */,
 				071B12FC26003EF500601036 /* CoreDataManager.swift in Sources */,
+				07FCC7BE2613F6A400D0ED08 /* TableSubjectPopUpButton.swift in Sources */,
 				0748CB1125FD3E29000D927F /* MenuBar.swift in Sources */,
 				07FDD7B525AC892400829469 /* Store.swift in Sources */,
 				0716326B25BFB5530043A65A /* StatusItemSectionView.swift in Sources */,

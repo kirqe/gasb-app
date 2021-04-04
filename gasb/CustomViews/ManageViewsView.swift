@@ -17,14 +17,16 @@ class ManageViewsView: NSView, LoadableView{
     @objc dynamic var canAddView = true
     @objc dynamic var canDeleteView = true
     @objc dynamic var objCount = 0
+
     
     @IBOutlet weak var viewsTableView: NSTableView!
     @IBOutlet weak var addButton: NSButton!
     @IBOutlet weak var deleteButton: NSButton!
-    
+
     @IBAction func addButtonClicked(_ sender: NSButton) {
         let view = View(context: viewModel.moc)
-        view.name = "my bookstore"
+        view.name = "My bookstore"
+        view.subject = "View"
         view.id = 0
         view.now = true
         view.day = true
@@ -41,14 +43,23 @@ class ManageViewsView: NSView, LoadableView{
         viewModel.arrayController.applyChanges()
         self.window?.close()
     }
+ 
+    @IBOutlet weak var ga3MetricsPopUp: NSPopUpButton!
+    @IBOutlet weak var ga4MetricsPopUp: NSPopUpButton!
     
-    @IBOutlet weak var usersMetricsRadio: NSButton!
-    @IBOutlet weak var sessionsMetricsRadio: NSButton!
-    @IBOutlet weak var pageViewsMetricsRadio: NSButton!
-    
+    @IBOutlet weak var subjectPopUp: NSPopUpButton!
 
-    @IBAction func setMetrics(_ sender: NSButton) {
-        UserDefaults.standard.set(sender.title, forKey: "metric")
+    
+    @IBAction func didSetGa3Metrics(_ sender: NSButton) {
+        if let selectedMetric = ga3MetricsPopUp.selectedItem?.title {
+            UserDefaults.standard.set(selectedMetric, forKey: "ga3_metric")
+        }
+    }
+    
+    @IBAction func didSetGa4Metrics(_ sender: NSButton) {
+        if let selectedMetric = ga4MetricsPopUp.selectedItem?.title {
+            UserDefaults.standard.set(selectedMetric, forKey: "ga4_metric")
+        }
     }
     
     override init(frame frameRect: NSRect) {
@@ -63,20 +74,28 @@ class ManageViewsView: NSView, LoadableView{
             addButton.bind(NSBindingName.enabled, to: self, withKeyPath: "canAddView", options: nil)
             deleteButton.bind(NSBindingName.enabled, to: self, withKeyPath: "canDeleteView", options: nil)
             
-            let metrics = [usersMetricsRadio, sessionsMetricsRadio, pageViewsMetricsRadio]
+
             
-            var metric = UserDefaults.standard.string(forKey: "metric")
-            if metric == nil {
-                UserDefaults.standard.set("Sessions", forKey: "metric")
-                metric = "Sessions"
+            let ga3_metric = UserDefaults.standard.string(forKey: "ga3_metric")
+            if ga3_metric == nil {
+                UserDefaults.standard.set("PageViews", forKey: "ga3_metric")
             }
             
-            metrics.forEach{
-                if $0?.title == metric {
-                    $0!.state = .on
-                }
+            let ga4_metric = UserDefaults.standard.string(forKey: "ga4_metric")
+            if ga4_metric == nil {
+                UserDefaults.standard.set("ScreenPageViews", forKey: "ga4_metric")
             }
+
+            ga3MetricsPopUp.removeAllItems()
+            ga3MetricsPopUp.addItems(withTitles: ["PageViews", "Sessions", "Users", "NewUsers"])
+            ga3MetricsPopUp.selectItem(withTitle: UserDefaults.standard.string(forKey: "ga3_metric") ?? "PageViews")
+            
+            ga4MetricsPopUp.removeAllItems()
+            ga4MetricsPopUp.addItems(withTitles: ["ScreenPageViews", "Sessions", "EngagedSessions", "TotalUsers", "NewUsers"])
+            ga4MetricsPopUp.selectItem(withTitle: UserDefaults.standard.string(forKey: "ga4_metric") ?? "ScreenPageViews")
+            
         }
+  
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -103,7 +122,6 @@ class ManageViewsView: NSView, LoadableView{
         super.init(coder: aDecoder)
     }
     
-    
     @IBAction func openAuth(_ sender: NSButton) {
         let accessVM = AccessViewModel()
         
@@ -115,7 +133,6 @@ class ManageViewsView: NSView, LoadableView{
             accessViewWindow = NSWindow(contentViewController: vc)
             
             let accessView = AccessView(viewModel: accessVM)
-            
             accessView.add(toView: vc.view)
             
             accessViewWindow.title = "Authenticate"

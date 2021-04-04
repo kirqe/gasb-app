@@ -34,7 +34,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     var iconWidth: CGFloat = CGFloat(30)
     var statusWidth: CGFloat = CGFloat(0)
     var stack: NSStackView?
-    var interval: Double = Double.random(in: 5...8)
+    var interval: Double = 15
 
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -256,7 +256,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     // MARK: - Handling clicking on menuItems
     @objc func openManageViewsView() {
         let vc = ViewController()
-        vc.view = NSView(frame: NSRect(x: 0.0, y: 0.0, width: 550, height: 250))
+        vc.view = NSView(frame: NSRect(x: 0.0, y: 0.0, width: 700, height: 300))
         
         if NSApp.windows.contains(manageViewWindow) {
             manageViewWindow.makeKeyAndOrderFront(self)
