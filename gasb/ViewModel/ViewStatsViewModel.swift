@@ -19,7 +19,7 @@ enum Kind: String, CaseIterable {
 class ViewStatsViewModel {
     var view: View?
     var id: String
-    var subject: String!
+    var subject: String
 
     var nowValue: Int? {
         didSet {
@@ -65,7 +65,7 @@ class ViewStatsViewModel {
     init(view: View, store: Store) {
         self.view = view
         self.id = "\(view.id)"
-        self.subject = view.subject
+        self.subject = view.subject ?? "View"
         
         self.now = view.now
         self.day = view.day
@@ -85,8 +85,6 @@ class ViewStatsViewModel {
         let mirror = Mirror(reflecting: self)
         
 //        let kinds = Kind.allCases.map { $0.rawValue }
-
-
         
         for case let (label?, value) in mirror.children {
             if label == kind.rawValue {

@@ -34,7 +34,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     var iconWidth: CGFloat = CGFloat(30)
     var statusWidth: CGFloat = CGFloat(0)
     var stack: NSStackView?
-    var interval: Double = 15
+    var interval: Double = 10
 
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
